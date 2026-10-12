@@ -20,7 +20,7 @@ Skill này áp dụng mô hình **Progressive Disclosure**: file `SKILL.md` này
 | Phần | Nhóm quy tắc | Các Rule | Tài liệu chi tiết |
 | :--- | :--- | :--- | :--- |
 | **I** | **Thiết Kế & Cấu Trúc DTO** | Rule 1 - 4 | [01-dto-design.md](./references/01-dto-design.md) |
-| **II** | **Coding Style & Định Dạng C#** | Rule 5 - 10.2 | [02-csharp-style.md](./references/02-csharp-style.md) |
+| **II** | **Coding Style & Định Dạng C#** | Rule 5 - 10.4 | [02-csharp-style.md](./references/02-csharp-style.md) |
 | **III & IV** | **JSON & Bất Đồng Bộ (Async)** | Rule 11 - 14 | [03-json-async.md](./references/03-json-async.md) |
 | **V** | **API Controller & Swagger** | Rule 15 - 16 | [04-api-controller.md](./references/04-api-controller.md) |
 | **VI** | **Kiến Trúc & Tích Hợp Đối Tác** | Rule 17 - 19 | [05-architecture-business.md](./references/05-architecture-business.md) |
@@ -49,6 +49,8 @@ Skill này áp dụng mô hình **Progressive Disclosure**: file `SKILL.md` này
 - **Invert `if` (Guard Clauses & Early Return)**: Luôn loại bỏ edge-case trước để luồng chính (Happy path) ở cấp ngoài cùng (Rule 8.1).
 - **Quy tắc `var`**: Dùng `var` khi kiểu rõ ở vế phải; khai báo kiểu tường minh khi gọi method hoặc kiểu primitive (Rule 9).
 - **File-scoped namespace** (`namespace App;`) cho .NET 6+ (Rule 10). Toàn bộ `using` đặt ở đầu file ngoài namespace (Rule 10.1).
+- **Từ khóa nguyên thủy & Định danh chuẩn .NET**: Dùng `string`, `int`, `bool` thay cho CLR types; ưu tiên `int` có dấu; static field có tiền tố `s_`, thread static `t_`; hằng số (`const`) PascalCase (cấm `UPPER_SNAKE_CASE`); enum số ít (flags số nhiều); generic prefix `T` (Rule 10.3).
+- **Sealed by default**: Mọi concrete class (Service, Strategy, Resolver, Repository, Validator...) không chủ đích kế thừa bắt buộc đánh dấu `sealed` (hoặc `internal sealed`) để bảo vệ đóng gói và kích hoạt tối ưu JIT Devirtualization; dùng `sealed override` khi ngắt chuỗi override (Rule 10.4).
 
 ### 3. JSON & Async ([Chi tiết](./references/03-json-async.md))
 - Dùng **`System.Text.Json`** thay cho `Newtonsoft.Json` (Rule 11).
@@ -106,6 +108,8 @@ Skill này áp dụng mô hình **Progressive Disclosure**: file `SKILL.md` này
 - [ ] **Style**: Dùng file-scoped namespace cho .NET 6+ (C# 10+), block-scoped namespace `{ }` cho .NET 5 trở xuống (Rule 10)
 - [ ] **Style**: Luôn đặt chỉ thị `using` ở đầu file, bên ngoài khai báo namespace (Rule 10.1)
 - [ ] **Style**: Tuân thủ thụt lề 4 spaces, ngoặc nhọn Allman, 1 lệnh/dòng, ngắt dòng trước toán tử nhị phân và XML comment cho public member (Rule 10.2)
+- [ ] **Style**: Dùng từ khóa C# nguyên thủy (`string`, `int`, `bool`), ưu tiên `int` có dấu, static field dùng `s_`, thread static `t_`, hằng số PascalCase, enum số ít (flags số nhiều), generic tiền tố `T` (Rule 10.3)
+- [ ] **Architecture/Style**: Mọi concrete class (Service, Strategy, Resolver, Repository, Validator...) không dùng làm base class phải đánh dấu `sealed` (hoặc `internal sealed`) (Rule 10.4)
 - [ ] **JSON**: Dùng `System.Text.Json`, không thêm `Newtonsoft.Json` cho code mới (Rule 11)
 - [ ] **JSON**: Property nullable trong DTO gửi đi/trả về có `[JsonIgnore(Condition = WhenWritingNull)]` hoặc global config (Rule 12)
 - [ ] **Async**: Mọi method trả `Task` có hậu tố `Async` (Rule 13)

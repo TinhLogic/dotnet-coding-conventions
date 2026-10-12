@@ -24,7 +24,7 @@ Bộ quy chuẩn lập trình bắt buộc dành cho mọi mã nguồn C# / .NET
 | Phần | Nhóm Quy Tắc | Các Rule | Tài Liệu Chi Tiết |
 | :--- | :--- | :--- | :--- |
 | **I** | **Thiết Kế & Cấu Trúc DTO** | Rule 1 - 4 | [`01-dto-design.md`](./references/01-dto-design.md) |
-| **II** | **Coding Style & Định Dạng C#** | Rule 5 - 10.2 | [`02-csharp-style.md`](./references/02-csharp-style.md) |
+| **II** | **Coding Style & Định Dạng C#** | Rule 5 - 10.4 | [`02-csharp-style.md`](./references/02-csharp-style.md) |
 | **III & IV** | **JSON & Bất Đồng Bộ (Async)** | Rule 11 - 14 | [`03-json-async.md`](./references/03-json-async.md) |
 | **V** | **API Controller & Swagger** | Rule 15 - 16 | [`04-api-controller.md`](./references/04-api-controller.md) |
 | **VI** | **Kiến Trúc & Tích Hợp Đối Tác** | Rule 17 - 19 | [`05-architecture-business.md`](./references/05-architecture-business.md) |
@@ -44,6 +44,8 @@ Bộ quy chuẩn lập trình bắt buộc dành cho mọi mã nguồn C# / .NET
 
 2. **C# Style & Clean Code**:
    - Sử dụng PascalCase cho thuộc tính; cách nhau 1 dòng trống; dùng `[JsonPropertyName("...")]` để map JSON.
+   - Dùng từ khóa nguyên thủy (`string`, `int`, `bool`) thay cho CLR types; ưu tiên `int` có dấu; static field có tiền tố `s_`, thread static `t_`; hằng số (`const`) PascalCase (cấm `UPPER_SNAKE_CASE`); enum số ít (flags số nhiều); generic tiền tố `T`.
+   - "Sealed by default": Mọi concrete class (Service, Strategy, Repository, Validator...) không chủ đích kế thừa bắt buộc đánh dấu `sealed` (hoặc `internal sealed`) để bảo vệ đóng gói và kích hoạt JIT Devirtualization.
    - XML Doc và comment song ngữ: Tiếng Việt trước, tiếng Anh sau; comment giải thích **TẠI SAO**, không tả lại code; xóa hẳn dead code.
    - Mọi `TODO`/`FIXME` bắt buộc phải kèm mã Jira (ví dụ: `// TODO(PROJ-123): ...`).
    - Khối `if`/`else` luôn có ngoặc nhọn `{ }`. Áp dụng Guard Clauses (Early Return) để phẳng hóa luồng xử lý.
@@ -71,6 +73,15 @@ Bộ quy chuẩn lập trình bắt buộc dành cho mọi mã nguồn C# / .NET
    - Phân trang & lọc phía SQL qua EF Core (`AsNoTracking()`, `Skip()`, `Take()`, `CountAsync()`).
    - Tuân thủ chuẩn tiếp cận WAI-ARIA (`aria-label`, `aria-busy`, `role="dialog"` cho modal).
    - Dữ liệu hiển thị trong bảng là văn bản thuần, không gắn emoji trang trí. Icon dùng SVG vector outline (Lucide / Heroicons).
+
+---
+
+## 📖 Tài Liệu Tham Chiếu Chính Thức (Official Microsoft References)
+
+Các quy chuẩn cốt lõi trong tài liệu này kế thừa trực tiếp và chuẩn hóa dựa trên các hướng dẫn chính thức từ Microsoft Learn nhằm đảm bảo tính chuẩn mực và tránh tranh cãi kỹ thuật:
+- [.NET Common C# Code Conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions): Quy ước định dạng mã nguồn C#, bố cục mã, cú pháp và thực hành chuẩn của .NET Runtime & Docs team.
+- [C# Identifier Naming Rules & Conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/identifier-names): Quy chuẩn đặt tên định danh (PascalCase, camelCase, tiền tố `s_` static fields, hằng số `const`, Enum flags, generic type parameters).
+- [Abstract and Sealed Classes and Class Members](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/abstract-and-sealed-classes-and-class-members): Nguyên lý kế thừa, thiết kế abstraction và thực hành "Sealed by default" tối ưu JIT Devirtualization.
 
 ---
 
@@ -109,7 +120,7 @@ Mandatory enterprise coding standards and guidelines for all C# / .NET, ASP.NET 
 | Part | Topic Group | Rules | Detailed Document |
 | :--- | :--- | :--- | :--- |
 | **I** | **DTO Design & Structure** | Rule 1 - 4 | [`01-dto-design.md`](./references/01-dto-design.md) |
-| **II** | **C# Coding Style & Formatting** | Rule 5 - 10.2 | [`02-csharp-style.md`](./references/02-csharp-style.md) |
+| **II** | **C# Coding Style & Formatting** | Rule 5 - 10.4 | [`02-csharp-style.md`](./references/02-csharp-style.md) |
 | **III & IV** | **JSON & Asynchronous Programming** | Rule 11 - 14 | [`03-json-async.md`](./references/03-json-async.md) |
 | **V** | **API Controller & Swagger** | Rule 15 - 16 | [`04-api-controller.md`](./references/04-api-controller.md) |
 | **VI** | **Architecture & Partner Integration** | Rule 17 - 19 | [`05-architecture-business.md`](./references/05-architecture-business.md) |
@@ -129,6 +140,8 @@ Mandatory enterprise coding standards and guidelines for all C# / .NET, ASP.NET 
 
 2. **C# Style & Clean Code**:
    - PascalCase properties; separated by one blank line; mapped with `[JsonPropertyName("...")]`.
+   - Use language keywords (`string`, `int`, `bool`) over CLR types; prefer signed `int`; static fields prefix `s_`, thread static `t_`; PascalCase constants (no `UPPER_SNAKE_CASE`); singular enums (plural for `[Flags]`); generic prefix `T`.
+   - "Sealed by default": Concrete classes (Services, Strategies, Repositories, Validators...) must be marked `sealed` (or `internal sealed`) unless explicitly designed for inheritance to preserve encapsulation and enable JIT Devirtualization.
    - Bilingual XML docs and comments: Vietnamese first, English second. Comments must answer **WHY**, not restate what code does. Remove dead code completely.
    - All `TODO`/`FIXME` items require an issue/ticket ID (e.g., `// TODO(PROJ-123): ...`).
    - Mandatory braces `{ }` for all `if`/`else` statements. Use Guard Clauses (Early Return) to flatten execution flow.
@@ -156,6 +169,15 @@ Mandatory enterprise coding standards and guidelines for all C# / .NET, ASP.NET 
    - Server-side pagination & filtering via SQL using EF Core (`AsNoTracking()`, `Skip()`, `Take()`, `CountAsync()`).
    - Adhere to WAI-ARIA accessibility (`aria-label`, `aria-busy`, `role="dialog"` for modals).
    - Clean data representation: plain text in table cells, no decorative emojis. Use outline vector SVG icons (Lucide / Heroicons).
+
+---
+
+## 📖 Official Microsoft References
+
+The conventions codified in this repository directly inherit and align with official Microsoft Learn architectural and language guidelines to maintain consistency and eliminate technical ambiguity:
+- [.NET Common C# Code Conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions): C# source code formatting, layout, modern language constructs, and runtime conventions used by the .NET Runtime and Docs teams.
+- [C# Identifier Naming Rules & Conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/identifier-names): Identifier naming standards (PascalCase, camelCase, `s_` static fields, `const` naming, Enum flags, generic type parameters).
+- [Abstract and Sealed Classes and Class Members](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/abstract-and-sealed-classes-and-class-members): OOP inheritance principles, virtual members, and "Sealed by default" practices for JIT Devirtualization.
 
 ---
 

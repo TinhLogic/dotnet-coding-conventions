@@ -392,3 +392,164 @@ Mọi chỉ thị `using` (import thư viện/namespace) phải được đặt 
 7. **Exception & Resource**: `using var` (using declaration), bắt ngoại lệ cụ thể.
 8. **Object Initializer**: Khởi tạo bằng `{ ... }`.
 
+---
+
+## 10.3. Quy ước Đặt tên Định danh & Kiểu Dữ liệu Chuẩn .NET (Identifier & Type Conventions)
+
+Kế thừa chuẩn mực từ .NET Runtime team và Microsoft C# Guidelines:
+
+### 1. Từ khóa nguyên thủy thay vì CLR Runtime Types
+- **Luôn sử dụng từ khóa C# nguyên thủy** (`string`, `int`, `long`, `bool`, `byte`, `nint`, `nuint`...) thay vì kiểu runtime .NET (`String`, `Int32`, `Int64`, `Boolean`, `Byte`, `IntPtr`...).
+- **Ưu tiên `int` có dấu** thay vì các kiểu không dấu (`uint`, `ulong`) cho các biến đếm, số lượng và chỉ mục thông thường. Kiểu `int` là chuẩn chung phổ quát trong C# và tương thích tối đa với các thư viện .NET. Chỉ sử dụng kiểu không dấu khi làm việc với interop native, bitmask hoặc tài liệu phần cứng/đối tác quy định bắt buộc.
+
+❌ **SAI**:
+```csharp
+System.String customerName = "Nguyen Van A";
+Int32 retryCount = 3;
+Boolean isSuccess = true;
+```
+
+✅ **ĐÚNG**:
+```csharp
+string customerName = "Nguyen Van A";
+int retryCount = 3;
+bool isSuccess = true;
+```
+
+### 2. Tiền tố Field tĩnh (`s_`) và ThreadStatic (`t_`)
+- **Instance field** (`private` / `internal`): Bắt đầu bằng dấu gạch dưới `_` + camelCase (ví dụ: `_logger`, `_httpClientFactory`).
+- **Static field** (`private` / `internal static`): Bắt đầu bằng tiền tố **`s_`** + camelCase để phân biệt rõ ràng giữa trạng thái tĩnh dùng chung và trạng thái theo instance.
+- **ThreadStatic field** (`[ThreadStatic]`): Bắt đầu bằng tiền tố **`t_`** + camelCase.
+
+✅ **ĐÚNG**:
+```csharp
+public class PaymentProcessingWorker
+{
+    private static readonly Lock s_syncLock = new();
+    private static readonly HttpClient s_sharedClient = new();
+
+    [ThreadStatic]
+    private static int t_executionDepth;
+
+    private readonly ILogger<PaymentProcessingWorker> _logger;
+}
+```
+
+### 3. Hằng số (`const`) luôn dùng PascalCase
+- Mọi hằng số (`const` field trong class, hằng số local trong method) **bắt buộc dùng PascalCase**.
+- **Cấm** dùng định dạng chữ hoa gạch dưới (`SCREAMING_SNAKE_CASE` hoặc `UPPER_SNAKE_CASE`).
+
+❌ **SAI**:
+```csharp
+private const int MAX_RETRY_ATTEMPTS = 3;
+public const string DEFAULT_CURRENCY = "VND";
+```
+
+✅ **ĐÚNG**:
+```csharp
+private const int MaxRetryAttempts = 3;
+public const string DefaultCurrency = "VND";
+```
+
+### 4. Quy ước Đặt tên Enum (Số ít vs Số nhiều)
+- **Enum thông thường (Non-flags)**: Dùng **danh từ số ít** (ví dụ: `OrderStatus`, `PaymentMethodType`, `InvoiceStatus`).
+- **Enum cờ bit (Có thuộc tính `[Flags]`)**: Dùng **danh từ số nhiều** (ví dụ: `UserPermissions`, `FileAccessOptions`, `AuditLogCategories`).
+
+✅ **ĐÚNG**:
+```csharp
+public enum PaymentStatus
+{
+    Pending,
+    Processing,
+    Completed,
+    Failed
+}
+
+[Flags]
+public enum UserPermissions
+{
+    None = 0,
+    Read = 1 << 0,
+    Write = 1 << 1,
+    Delete = 1 << 2,
+    All = Read | Write | Delete
+}
+```
+
+### 5. Tham số Kiểu Generic (Type Parameters)
+- Khi generic chỉ có duy nhất **1 tham số**: Dùng chữ cái đơn **`T`** (`List<T>`, `IResultDto<T>`).
+- Khi generic có **nhiều tham số**: Bắt buộc bắt đầu bằng tiền tố **`T`** kết hợp với danh từ mô tả rõ vai trò (`Converter<TInput, TOutput>`, `ISessionChannel<TSession>`, `IMapper<TSource, TDestination>`).
+
+### 6. Gọi Static Member qua đúng tên Class khai báo
+- Luôn gọi static member thông qua chính xác tên lớp khai báo ban đầu (`ClassName.StaticMember`), **không** gọi static member của lớp cha qua tên của lớp con kế thừa.
+- Tránh nguy cơ hiểu nhầm ngữ nghĩa và tránh gãy code khi lớp con vô tình bổ sung static member cùng tên trong tương lai.
+
+### 7. Quy tắc Cú pháp Bổ sung
+- **Không dùng 2 dấu gạch dưới liên tiếp (`__`)** trong bất kỳ định danh nào (đây là cú pháp dành riêng cho compiler Roslyn sinh mã).
+- **Toán tử so sánh điều kiện**: Luôn dùng `&&` và `||` (toán tử ngắn mạch - short-circuiting), cấm dùng `&` và `|` trong biểu thức điều kiện boolean (trừ khi thao tác bitwise trên số hoặc enum flags).
+
+---
+
+## 10.4. Nguyên tắc Sealed by Default & Kế thừa (Inheritance & Sealed Guidelines)
+
+Tuân thủ triết lý cốt lõi của OOP hiện đại: **"Design for inheritance, or prohibit it"** (Thiết kế có chủ đích cho kế thừa, hoặc phải cấm kế thừa):
+
+### 1. "Sealed by Default" cho Concrete Classes
+Mọi concrete class (Service, Strategy, Resolver, Repository, Validator, Decorator, Adapter...) nếu **không được thiết kế có chủ đích để làm Base class** thì **bắt buộc đánh dấu `sealed`** (hoặc `internal sealed`).
+
+Lợi ích bắt buộc:
+1. **Bảo vệ tính đóng gói & Hợp đồng (Encapsulation)**: Ngăn chặn triệt để hành vi kế thừa tự phát (Inheritance abuse) phá vỡ logic nội bộ hoặc tạo ra sự phụ thuộc chặt chẽ ngoài ý muốn.
+2. **Kích hoạt JIT Devirtualization (.NET 6/7/8/9)**: JIT compiler khi phát hiện class là `sealed` sẽ tự động chuyển đổi các lời gọi ảo (virtual call / interface dispatch) thành **direct method call** và tự động **inline** mã nguồn, giúp tăng thông lượng xử lý CPU và giảm cấp phát tài nguyên đáng kể.
+
+❌ **SAI**:
+```csharp
+internal class KredivoEWalletProviderStrategy : IEWalletProviderStrategy
+{
+    // Để class hở, cho phép kế thừa ngoài ý muốn và JIT không devirtualize được tối đa
+}
+```
+
+✅ **ĐÚNG**:
+```csharp
+internal sealed class KredivoEWalletProviderStrategy : IEWalletProviderStrategy
+{
+    // Đóng kín class, bảo vệ hợp đồng và hỗ trợ tối ưu JIT
+}
+```
+
+### 2. Sử dụng `sealed override`
+Khi một class con ghi đè một phương thức `virtual` hoặc `abstract` từ base class và muốn **chấm dứt chuỗi ghi đè** (không cho phép các lớp kế thừa tiếp theo sửa đổi hành vi), sử dụng từ khóa kết hợp `sealed override`.
+
+```csharp
+public class BaseWorker
+{
+    public virtual void Execute() { }
+}
+
+public class StandardWorker : BaseWorker
+{
+    // Chặn mọi lớp kế thừa từ StandardWorker không được override lại Execute
+    public sealed override void Execute()
+    {
+        // Core implementation
+    }
+}
+```
+
+### 3. Quy chuẩn sử dụng `abstract`
+- Chỉ dùng `abstract class` cho các cấu trúc hạ tầng hoặc pattern có **chủ đích thiết kế kế thừa rõ ràng**:
+  - **Template Method**: Abstract class giữ khung luồng xử lý cố định (Rule 19 & Rule 24).
+  - **Decorator Base**: Abstract class giữ tham chiếu Component và delegate cuộc gọi (`PartnerServiceDecoratorBase`).
+  - **Validator Base**: Kế thừa `AbstractValidator<T>` (Rule 17).
+- Cấm tùy tiện tạo abstract class khi chưa có nhu cầu kế thừa thực tế (chống Over-engineering, Rule 24).
+- Mọi implementation của một abstract class phải tuân thủ trọn vẹn hợp đồng LSP (Rule 24.5b) — cấm ném `NotSupportedException` trong derived class.
+
+---
+
+## 📚 Tài Liệu Tham Chiếu Microsoft (Official References)
+
+Để tra cứu chi tiết và đối chiếu các tiêu chuẩn của Microsoft Runtime & Language teams:
+- [.NET Common C# Code Conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions)
+- [C# Identifier Naming Rules & Conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/identifier-names)
+- [Abstract and Sealed Classes and Class Members](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/abstract-and-sealed-classes-and-class-members)
+
