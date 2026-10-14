@@ -1,9 +1,12 @@
 ---
 name: dotnet-coding-conventions
 description: >-
-  Enforces mandatory C#/.NET enterprise coding conventions, architecture patterns, DTO design rules,
-  GoF design patterns, async/cancellation token practices, Git workflows, and Blazor UI/WAI-ARIA/SVG icon standards.
-  Use whenever writing, reviewing, refactoring, or generating C#, ASP.NET Core, or Blazor code.
+  Mandatory skill for writing, reviewing, refactoring, or generating C#, .NET, ASP.NET Core, and Blazor code.
+  Auto-triggers whenever the prompt involves: C#, csharp, .NET, dotnet, Blazor, ASP.NET, EF Core, Entity Framework,
+  LINQ, DTO, Controller, Service, Repository, CancellationToken, or any .cs file.
+  Tự động kích hoạt khi prompt tiếng Việt liên quan đến: viết code C#, tạo DTO, tạo controller, review code .NET,
+  refactor C#, xử lý async C#, tối ưu bảng Blazor, WAI-ARIA.
+  Agent MUST read this SKILL.md before generating or editing C# code.
 ---
 
 # .NET & C# Enterprise Coding Conventions
