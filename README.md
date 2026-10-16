@@ -31,6 +31,7 @@ Bộ quy chuẩn lập trình bắt buộc dành cho mọi mã nguồn C# / .NET
 | **VII** | **Quy Trình Git & Build** | Rule 20 - 23 | [`06-workflow-git-build.md`](./references/06-workflow-git-build.md) |
 | **VIII** | **Design Pattern & Quản Lý Độ Phức Tạp** | Rule 24 | [`07-design-patterns.md`](./references/07-design-patterns.md) |
 | **IX** | **Giao Diện UI & Accessibility** | Rule 25 - 28 | [`08-ui-accessibility.md`](./references/08-ui-accessibility.md) |
+| **X** | **Giao Dịch Cơ Sở Dữ Liệu & Toàn Vẹn ACID** | Rule 29 | [`09-database-transactions.md`](./references/09-database-transactions.md) |
 
 ---
 
@@ -73,6 +74,13 @@ Bộ quy chuẩn lập trình bắt buộc dành cho mọi mã nguồn C# / .NET
    - Phân trang & lọc phía SQL qua EF Core (`AsNoTracking()`, `Skip()`, `Take()`, `CountAsync()`).
    - Tuân thủ chuẩn tiếp cận WAI-ARIA (`aria-label`, `aria-busy`, `role="dialog"` cho modal).
    - Dữ liệu hiển thị trong bảng là văn bản thuần, không gắn emoji trang trí. Icon dùng SVG vector outline (Lucide / Heroicons).
+
+8. **Giao Dịch Cơ Sở Dữ Liệu & Toàn Vẹn ACID**:
+   - Thao tác ghi nhiều thực thể liên đới bắt buộc nằm trong Transaction (`BeginTransactionAsync` hoặc Unit of Work); chỉ gọi `SaveChangesAsync()` một lần duy nhất tại điểm kết thúc luồng.
+   - Tuyệt đối CẤM gọi Third-party HTTP API, gRPC, gửi Email/SMS bên trong Database Transaction để tránh cạn kiệt Connection Pool và deadlock (tách thành quy trình 3 pha).
+   - Bọc trong `strategy.ExecuteAsync()` khi DbContext bật kết nối tự phục hồi (`EnableRetryOnFailure`).
+   - Chống mất dữ liệu tương tranh (*Lost Updates*) bằng Optimistic Concurrency (`[Timestamp]` / `RowVersion`), không lạm dụng khóa bi quan dài hạn.
+   - Áp dụng Transactional Outbox Pattern cho các sự kiện/thông điệp phân tán; kiểm tra `IdempotencyKey` tại các webhook/callback đối tác.
 
 ---
 
@@ -127,6 +135,7 @@ Mandatory enterprise coding standards and guidelines for all C# / .NET, ASP.NET 
 | **VII** | **Git Workflow & Modern Build** | Rule 20 - 23 | [`06-workflow-git-build.md`](./references/06-workflow-git-build.md) |
 | **VIII** | **Design Patterns & Complexity Management** | Rule 24 | [`07-design-patterns.md`](./references/07-design-patterns.md) |
 | **IX** | **UI Components & Accessibility** | Rule 25 - 28 | [`08-ui-accessibility.md`](./references/08-ui-accessibility.md) |
+| **X** | **Database Transactions & ACID Consistency** | Rule 29 | [`09-database-transactions.md`](./references/09-database-transactions.md) |
 
 ---
 
@@ -169,6 +178,13 @@ Mandatory enterprise coding standards and guidelines for all C# / .NET, ASP.NET 
    - Server-side pagination & filtering via SQL using EF Core (`AsNoTracking()`, `Skip()`, `Take()`, `CountAsync()`).
    - Adhere to WAI-ARIA accessibility (`aria-label`, `aria-busy`, `role="dialog"` for modals).
    - Clean data representation: plain text in table cells, no decorative emojis. Use outline vector SVG icons (Lucide / Heroicons).
+
+8. **Database Transactions & ACID Consistency**:
+   - Multi-entity/table writes must execute within a Transaction (`BeginTransactionAsync` or Unit of Work); call `SaveChangesAsync()` exactly once at the end.
+   - Strictly FORBIDDEN to perform external network calls (Third-party HTTP APIs, gRPC, emails) inside a DB Transaction to prevent connection pool exhaustion and deadlocks (split into 3-phase flow).
+   - Wrap transactions in `strategy.ExecuteAsync()` when EF Core connection resiliency (`EnableRetryOnFailure`) is enabled.
+   - Use Optimistic Concurrency (`[Timestamp]` / `RowVersion`) instead of prolonged pessimistic locking to avoid Lost Updates.
+   - Employ the Transactional Outbox Pattern for distributed events; enforce idempotency checks on all incoming webhooks/callbacks.
 
 ---
 

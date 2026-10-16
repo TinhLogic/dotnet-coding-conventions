@@ -30,6 +30,7 @@ Skill này áp dụng mô hình **Progressive Disclosure**: file `SKILL.md` này
 | **VII** | **Quy Trình Git & Build** | Rule 20 - 23 | [06-workflow-git-build.md](./references/06-workflow-git-build.md) |
 | **VIII** | **Design Pattern & Quản Lý Độ Phức Tạp** | Rule 24 | [07-design-patterns.md](./references/07-design-patterns.md) |
 | **IX** | **Giao Diện UI & Accessibility** | Rule 25 - 28 | [08-ui-accessibility.md](./references/08-ui-accessibility.md) |
+| **X** | **Giao Dịch Cơ Sở Dữ Liệu & Toàn Vẹn ACID** | Rule 29 | [09-database-transactions.md](./references/09-database-transactions.md) |
 
 ---
 
@@ -88,6 +89,13 @@ Skill này áp dụng mô hình **Progressive Disclosure**: file `SKILL.md` này
 - **Clean Data Representation**: Dữ liệu ô bảng là text thuần túy; cấm emoji/icon trang trí; text/mã định danh không bọc `.badge` (badge chỉ dùng cho status) (Rule 27).
 - **Icon Style & SVG Usage**: Vector outline icon (Lucide / Heroicons outline), `stroke="currentColor"`, `fill="none"`, `stroke-width="2"` (hoặc `2.5` cho nút bấm nhỏ), bo góc tròn `round`; không dùng Icon Font / PNG bitmap; icon trang trí có `aria-hidden="true"`, icon-only button có `aria-label` (Rule 28).
 
+### 9. Giao Dịch Cơ Sở Dữ Liệu & Toàn Vẹn ACID ([Chi tiết](./references/09-database-transactions.md))
+- **ACID & Unit of Work**: Thao tác ghi đa bảng/đa bản ghi liên đới bắt buộc bọc trong Transaction (`IDbContextTransaction` hoặc Unit of Work); gọi `SaveChangesAsync()` đúng một lần duy nhất tại điểm kết thúc luồng nghiệp vụ (Rule 29, 29.1).
+- **CẤM gọi API ngoài trong DB Transaction**: Tuyệt đối không gọi Third-party HTTP API, gRPC, gửi Email/SMS bên trong Database Transaction để tránh cạn kiệt connection pool và deadlock kéo dài; tách thành luồng 3 pha (Pending → HTTP Partner → Update kết quả) (Rule 29.2).
+- **Resiliency**: Khi DbContext cấu hình `EnableRetryOnFailure`, bắt buộc bọc transaction qua `strategy.ExecuteAsync(...)` (Rule 29.3).
+- **Optimistic Concurrency**: Sử dụng `[Timestamp]` / `RowVersion` cho các thực thể số dư/tồn kho/trạng thái nhạy cảm để chống Lost Updates, bắt lỗi `DbUpdateConcurrencyException` thay vì giữ khóa bi quan (Rule 29.4).
+- **Transactional Outbox & Idempotency**: Áp dụng Outbox Pattern cho các sự kiện xuất bản ra Message Broker/Webhook; mọi callback/webhook phải có guard clause kiểm tra `IdempotencyKey` và trạng thái bản ghi chống xử lý trùng lặp (Rule 29.5).
+
 ---
 
 ## ✅ Checklist Trước Khi Kết Thúc Task
@@ -132,4 +140,5 @@ Skill này áp dụng mô hình **Progressive Disclosure**: file `SKILL.md` này
 - [ ] **Accessibility (WAI-ARIA)**: Bảng dữ liệu có `caption`/`aria-label`, `th[scope="col"]`, `aria-busy`, `aria-live="polite"`; Modal có `role="dialog"`, `aria-modal="true"`, `aria-labelledby`, nút đóng có `aria-label`, phím `Escape`; Custom dropdown có `aria-expanded`, `role="listbox"`, `role="option"`; Icon button có `aria-label` (Rule 26)
 - [ ] **Table Data Formatting**: Dữ liệu hiển thị trong bảng không chèn emoji/icon trang trí (hiển thị text thuần túy); text thông thường, mã hành chính, mã định danh không bọc thẻ `.badge`/`.chip`/`.tag` (Rule 27)
 - [ ] **Icon Style & SVG Usage**: Dùng vector outline icon (Lucide / Heroicons outline), `stroke="currentColor"`, `fill="none"`, `stroke-width="2"` (hoặc `2.5` cho nút bấm nhỏ), bo góc tròn `round`; không dùng Icon Font / PNG bitmap / solid icon bừa bãi; icon trang trí có `aria-hidden="true"`, icon-only button có `aria-label` (Rule 28)
+- [ ] **Database Transaction & ACID**: Thao tác ghi đa bảng/đa bản ghi liên đới bọc trong Transaction (`BeginTransactionAsync` hoặc Unit of Work); gọi `SaveChangesAsync()` một lần duy nhất ở cuối luồng; tuyệt đối không gọi Third-party HTTP/Network I/O trong DB Transaction; bọc `strategy.ExecuteAsync()` khi bật retry; có Optimistic Concurrency (`[Timestamp]`/`RowVersion`) cho thực thể nhạy cảm; áp dụng Transactional Outbox khi phát sinh sự kiện ra ngoài (Rule 29)
 
