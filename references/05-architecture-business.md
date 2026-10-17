@@ -166,7 +166,11 @@ public class PartnerApiClient : IPartnerApiClient
         response.EnsureSuccessStatusCode();
 
         string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<PartnerResponseDto>(responseContent, JsonOptions)!;
+
+        // Body rỗng hoặc "null" vẫn deserialize thành null, phải chặn thay vì dùng toán tử ! (Rule 27)
+        // An empty or "null" body still deserializes to null, so guard it instead of using the ! operator (Rule 27)
+        return JsonSerializer.Deserialize<PartnerResponseDto>(responseContent, JsonOptions)
+            ?? throw new PartnerIntegrationException(PartnerErrorCodes.EmptyResponse);
     }
 }
 ```

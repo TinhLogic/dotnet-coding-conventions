@@ -32,6 +32,13 @@ Bộ quy chuẩn lập trình bắt buộc dành cho mọi mã nguồn C# / .NET
 | **VIII** | **Design Pattern & Quản Lý Độ Phức Tạp** | Rule 24 | [`07-design-patterns.md`](./references/07-design-patterns.md) |
 | **IX** | **Giao Diện UI & Accessibility** | Rule 25 - 28 | [`08-ui-accessibility.md`](./references/08-ui-accessibility.md) |
 | **X** | **Giao Dịch Cơ Sở Dữ Liệu & Toàn Vẹn ACID** | Rule 29 | [`09-database-transactions.md`](./references/09-database-transactions.md) |
+| **XI** | **Xử Lý Lỗi & Nullable Reference Types** | Rule 26 - 27 | [`10-error-handling-nullable.md`](./references/10-error-handling-nullable.md) |
+| **XII** | **Bẫy Bất Đồng Bộ & Vòng Đời Dependency Injection** | Rule 28 - 29 | [`11-async-di.md`](./references/11-async-di.md) |
+| **XIII** | **Hiệu Năng Truy Vấn EF Core** | Rule 30 | [`12-efcore-query-performance.md`](./references/12-efcore-query-performance.md) |
+| **XIV** | **Quan Sát Hệ Thống & Bảo Mật Ứng Dụng** | Rule 31 - 32 | [`13-observability-security.md`](./references/13-observability-security.md) |
+| **XV** | **Resilience, Cấu Hình & Thời Gian / Tiền Tệ** | Rule 33 - 35 | [`14-resilience-config-time.md`](./references/14-resilience-config-time.md) |
+| **XVI** | **Enforcement Bằng Công Cụ & Kiểm Thử** | Rule 36 - 37 | [`15-enforcement-testing.md`](./references/15-enforcement-testing.md) |
+| **XVII** | **Thiết Kế Bền Vững & Quản Trị Convention** | Rule 38 - 42 | [`16-design-governance.md`](./references/16-design-governance.md) |
 
 ---
 
@@ -136,6 +143,13 @@ Mandatory enterprise coding standards and guidelines for all C# / .NET, ASP.NET 
 | **VIII** | **Design Patterns & Complexity Management** | Rule 24 | [`07-design-patterns.md`](./references/07-design-patterns.md) |
 | **IX** | **UI Components & Accessibility** | Rule 25 - 28 | [`08-ui-accessibility.md`](./references/08-ui-accessibility.md) |
 | **X** | **Database Transactions & ACID Consistency** | Rule 29 | [`09-database-transactions.md`](./references/09-database-transactions.md) |
+| **XI** | **Error Handling & Null Safety** | Rule 26 - 27 | [`10-error-handling-nullable.md`](./references/10-error-handling-nullable.md) |
+| **XII** | **Async Pitfalls & DI Lifetime** | Rule 28 - 29 | [`11-async-di.md`](./references/11-async-di.md) |
+| **XIII** | **EF Core Query Performance** | Rule 30 | [`12-efcore-query-performance.md`](./references/12-efcore-query-performance.md) |
+| **XIV** | **Observability & Application Security** | Rule 31 - 32 | [`13-observability-security.md`](./references/13-observability-security.md) |
+| **XV** | **Resilience, Configuration & Time/Culture** | Rule 33 - 35 | [`14-resilience-config-time.md`](./references/14-resilience-config-time.md) |
+| **XVI** | **Tooling Enforcement & Automated Testing** | Rule 36 - 37 | [`15-enforcement-testing.md`](./references/15-enforcement-testing.md) |
+| **XVII** | **Sustainable Design & Convention Governance** | Rule 38 - 42 | [`16-design-governance.md`](./references/16-design-governance.md) |
 
 ---
 

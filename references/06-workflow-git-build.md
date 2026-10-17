@@ -93,7 +93,7 @@ Sau khi hoàn thành code, AI agent **bắt buộc** phải chạy `dotnet build
 ### Quy tắc
 
 - **Không** được báo task hoàn thành nếu build còn error.
-- **Không** được suppress warning bằng `#pragma warning disable` trừ khi có lý do chính đáng và được ghi chú rõ ràng (ví dụ: false positive từ analyzer).
+- **Không** được suppress warning bằng `#pragma warning disable` / `[SuppressMessage]` trừ khi tuân thủ đúng quy trình ngoại lệ ở Rule 42 (ghi đủ Lý do – Lợi ích – Rủi ro, phạm vi hẹp nhất, có mã Jira) và liệt kê trong phần tổng kết task.
 - Nếu error đến từ dependency chưa có (missing NuGet package), phải thông báo user và hướng dẫn cài đặt, không im lặng bỏ qua.
 - Nếu error không thể fix được do hạn chế context (ví dụ: thiếu file từ project khác), phải **liệt kê rõ** danh sách errors còn lại và lý do chưa fix trong phần tổng kết.
 
@@ -244,11 +244,11 @@ dotnet new buildprops --use-artifacts
 
 | Path                                          | Ý nghĩa                                         |
 | --------------------------------------------- | ----------------------------------------------- |
-| `artifacts/bin/ICT.FRTTMO.X.Domain/debug`     | Output build (thay cho `bin/Debug/`)            |
-| `artifacts/obj/ICT.FRTTMO.X.Domain/debug`     | File trung gian (thay cho `obj/Debug/`)         |
-| `artifacts/bin/ICT.FRTTMO.X.Domain/debug_net8.0` | Output của project multi-target                 |
+| `artifacts/bin/OrderService.Domain/debug`     | Output build (thay cho `bin/Debug/`)            |
+| `artifacts/obj/OrderService.Domain/debug`     | File trung gian (thay cho `obj/Debug/`)         |
+| `artifacts/bin/OrderService.Domain/debug_net8.0` | Output của project multi-target                 |
 | `artifacts/package/release`                   | Nơi sinh file `.nupkg` (khi `GeneratePackageOnBuild`) |
-| `artifacts/publish/ICT.FRTTMO.X.Host/release_linux-x64` | Output `dotnet publish`                         |
+| `artifacts/publish/OrderService.Host/release_linux-x64` | Output `dotnet publish`                         |
 
 ### ⚠️ Quy tắc bắt buộc (dễ làm sai)
 
