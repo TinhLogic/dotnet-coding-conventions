@@ -39,6 +39,7 @@ Bộ quy chuẩn lập trình bắt buộc dành cho mọi mã nguồn C# / .NET
 | **XV** | **Resilience, Cấu Hình & Thời Gian / Tiền Tệ** | Rule 33 - 35 | [`14-resilience-config-time.md`](./references/14-resilience-config-time.md) |
 | **XVI** | **Enforcement Bằng Công Cụ & Kiểm Thử** | Rule 36 - 37 | [`15-enforcement-testing.md`](./references/15-enforcement-testing.md) |
 | **XVII** | **Thiết Kế Bền Vững & Quản Trị Convention** | Rule 38 - 42 | [`16-design-governance.md`](./references/16-design-governance.md) |
+| **XVIII** | **Quản Lý Bộ Nhớ & Zero-Allocation** | Rule 43 - 45 | [`17-high-performance-zero-allocation.md`](./references/17-high-performance-zero-allocation.md) |
 
 ---
 
@@ -88,6 +89,11 @@ Bộ quy chuẩn lập trình bắt buộc dành cho mọi mã nguồn C# / .NET
    - Bọc trong `strategy.ExecuteAsync()` khi DbContext bật kết nối tự phục hồi (`EnableRetryOnFailure`).
    - Chống mất dữ liệu tương tranh (*Lost Updates*) bằng Optimistic Concurrency (`[Timestamp]` / `RowVersion`), không lạm dụng khóa bi quan dài hạn.
    - Áp dụng Transactional Outbox Pattern cho các sự kiện/thông điệp phân tán; kiểm tra `IdempotencyKey` tại các webhook/callback đối tác.
+
+9. **Quản Lý Bộ Nhớ & Zero-Allocation Hot Path**:
+   - Mượn buffer tạm (≥ 1KB) từ `ArrayPool<T>.Shared` và luôn trả trong khối `finally` (`clearArray: true` nếu chứa dữ liệu nhạy cảm); thay `new MemoryStream()` bằng `Microsoft.IO.RecyclableMemoryStream` cho các tác vụ nén, I/O lớn chống phân mảnh LOH và Gen 2 GC pauses.
+   - Thao tác cắt chuỗi và parse dữ liệu hot-path bằng `ReadOnlySpan<char>` và `ISpanParsable<T>` thay vì `Substring()` / `Split()`; dựng chuỗi bằng `string.Create` hoặc `stackalloc` an toàn (ngưỡng tối đa ≤ 256 bytes).
+   - Triệt tiêu boxing (cấm `enum.ToString()` trên hot-path); dùng `static lambda` (`static (x) => ...`) và truyền state qua tham số để tránh sinh closure `DisplayClass`; cấm LINQ trong hot loop; kiểm chứng định lượng bằng `BenchmarkDotNet` với `[MemoryDiagnoser]` đạt `Allocated = 0 B`.
 
 ---
 
@@ -150,6 +156,7 @@ Mandatory enterprise coding standards and guidelines for all C# / .NET, ASP.NET 
 | **XV** | **Resilience, Configuration & Time/Culture** | Rule 33 - 35 | [`14-resilience-config-time.md`](./references/14-resilience-config-time.md) |
 | **XVI** | **Tooling Enforcement & Automated Testing** | Rule 36 - 37 | [`15-enforcement-testing.md`](./references/15-enforcement-testing.md) |
 | **XVII** | **Sustainable Design & Convention Governance** | Rule 38 - 42 | [`16-design-governance.md`](./references/16-design-governance.md) |
+| **XVIII** | **Memory Management & Zero-Allocation** | Rule 43 - 45 | [`17-high-performance-zero-allocation.md`](./references/17-high-performance-zero-allocation.md) |
 
 ---
 
@@ -199,6 +206,11 @@ Mandatory enterprise coding standards and guidelines for all C# / .NET, ASP.NET 
    - Wrap transactions in `strategy.ExecuteAsync()` when EF Core connection resiliency (`EnableRetryOnFailure`) is enabled.
    - Use Optimistic Concurrency (`[Timestamp]` / `RowVersion`) instead of prolonged pessimistic locking to avoid Lost Updates.
    - Employ the Transactional Outbox Pattern for distributed events; enforce idempotency checks on all incoming webhooks/callbacks.
+
+9. **Memory Management & Zero-Allocation Hot Path**:
+   - Rent temporary buffers (≥ 1KB) from `ArrayPool<T>.Shared` and always return them in a `finally` block (`clearArray: true` for sensitive data); replace `new MemoryStream()` with `Microsoft.IO.RecyclableMemoryStream` for large I/O and compression to prevent LOH fragmentation and Gen 2 GC pauses.
+   - Slice and parse hot-path text/data using `ReadOnlySpan<char>` and `ISpanParsable<T>` instead of `Substring()` / `Split()`; construct strings via `string.Create` or safe `stackalloc` (threshold ≤ 256 bytes).
+   - Eliminate boxing (no `enum.ToString()` on hot paths); use `static lambda` (`static (x) => ...`) and pass state through arguments to prevent compiler-generated `DisplayClass` closure allocations; avoid LINQ in hot loops; quantitatively prove zero allocations using `BenchmarkDotNet` with `[MemoryDiagnoser]` showing `Allocated = 0 B`.
 
 ---
 

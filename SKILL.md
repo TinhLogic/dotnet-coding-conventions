@@ -3,11 +3,12 @@ name: dotnet-coding-conventions
 description: >-
   Mandatory skill for writing, reviewing, refactoring, or generating C#, .NET, ASP.NET Core, and Blazor code.
   Auto-triggers whenever the prompt involves: C#, csharp, .NET, dotnet, Blazor, ASP.NET, EF Core, Entity Framework,
-  LINQ, DTO, Controller, Service, Repository, CancellationToken, or any .cs file.
+  LINQ, DTO, Controller, Service, Repository, CancellationToken, zero-allocation, ArrayPool, Span, or any .cs file.
   Tự động kích hoạt khi prompt tiếng Việt liên quan đến: viết code C#, tạo DTO, tạo controller, review code .NET,
   refactor C#, xử lý async C#, tối ưu bảng Blazor, WAI-ARIA, xử lý lỗi exception, nullable reference types,
   tối ưu query EF Core, N+1, dependency injection, captive dependency, logging Serilog/APM, bảo mật OWASP,
-  Polly resilience, Options pattern, unit test xUnit, WebApplicationFactory, quản trị breaking change, idempotency, ADR.
+  Polly resilience, Options pattern, unit test xUnit, WebApplicationFactory, quản trị breaking change, idempotency, ADR,
+  zero allocation, ArrayPool, RecyclableMemoryStream, Span, ReadOnlySpan, Memory, BenchmarkDotNet, tối ưu bộ nhớ.
   Agent MUST read this SKILL.md before generating or editing C# code.
 ---
 
@@ -40,6 +41,7 @@ Skill này áp dụng mô hình **Progressive Disclosure**: file `SKILL.md` này
 | **XV** | **Resilience, Cấu Hình & Thời Gian / Tiền Tệ** | Rule 33 - 35 | [14-resilience-config-time.md](./references/14-resilience-config-time.md) |
 | **XVI** | **Enforcement Bằng Công Cụ & Kiểm Thử** | Rule 36 - 37 | [15-enforcement-testing.md](./references/15-enforcement-testing.md) |
 | **XVII** | **Thiết Kế Bền Vững & Quản Trị Convention** | Rule 38 - 42 | [16-design-governance.md](./references/16-design-governance.md) |
+| **XVIII** | **Quản Lý Bộ Nhớ & Zero-Allocation** | Rule 43 - 45 | [17-high-performance-zero-allocation.md](./references/17-high-performance-zero-allocation.md) |
 
 ---
 
@@ -143,6 +145,11 @@ Skill này áp dụng mô hình **Progressive Disclosure**: file `SKILL.md` này
 - **Tiêu chí Merge Request**: Mỗi MR phải chứng minh tính đúng, an toàn, có kết quả test và kế hoạch rollback; cấm MR không mô tả (Rule 41).
 - **Ngoại lệ convention**: Chỉ được vi phạm convention khi ghi rõ đủ 3 thông tin LÝ DO – LỢI ÍCH – RỦI RO (& giảm thiểu) kèm mã Jira; cấp cục bộ dùng `[SuppressMessage]`/`#pragma` bao đúng dòng; cấp project bắt buộc có Architecture Decision Record (ADR) (Rule 42).
 
+### 17. Quản Lý Bộ Nhớ & Zero-Allocation Hot Path ([Chi tiết](./references/17-high-performance-zero-allocation.md))
+- **Memory Pooling**: Mượn buffer tạm (≥ 1KB) từ `ArrayPool<T>.Shared` và luôn `Return()` trong khối `finally` (`clearArray: true` nếu chứa dữ liệu nhạy cảm); thay `new MemoryStream()` bằng `Microsoft.IO.RecyclableMemoryStream` cho các tác vụ stream/nén/I/O lớn chống phân mảnh LOH và Gen 2 GC pauses (Rule 43).
+- **Span & Zero-Alloc Slicing**: Dùng `ReadOnlySpan<T>` cắt chuỗi/dữ liệu thay cho `Substring()` và `Split()`; parse dữ liệu qua `ISpanParsable<T>`; định dạng chuỗi hot-path bằng `string.Create` và `stackalloc` an toàn (ngưỡng tối đa ≤ 256 bytes) (Rule 44).
+- **Triệt tiêu Boxing & Closure**: Cấm `enum.ToString()` trên hot-path; dùng `static lambda` (`static (x) => ...`) và truyền state qua tham số argument để tránh compiler tạo closure class `DisplayClass` trên Heap; cấm LINQ trong hot loop; mọi tối ưu hiệu năng phải được chứng minh định lượng bằng `BenchmarkDotNet` với `[MemoryDiagnoser]` đạt `Allocated = 0 B` (Rule 45).
+
 ---
 
 ## ✅ Checklist Trước Khi Kết Thúc Task
@@ -204,5 +211,8 @@ Skill này áp dụng mô hình **Progressive Disclosure**: file `SKILL.md` này
 - [ ] **Domain Modeling**: Khái niệm có bất biến đóng gói bằng Value Object (`readonly record struct`); Entity đóng gói hành vi thay vì anemic model (Rule 40)
 - [ ] **Merge Request**: Mỗi MR chứng minh tính đúng, an toàn, có kết quả test và kế hoạch rollback (Rule 41)
 - [ ] **Convention Exceptions**: Mọi ngoại lệ convention (suppress warning/NoWarn) phải ghi đủ Lý do - Lợi ích - Rủi ro kèm mã Jira ticket và được giải trình trong MR/task summary (Rule 42)
+- [ ] **Memory Pooling**: Buffer tạm lớn mượn từ `ArrayPool<T>.Shared` và trả trong `finally` (`clearArray: true` cho dữ liệu nhạy cảm); stream I/O lớn dùng `RecyclableMemoryStream` thay cho `new MemoryStream()` (Rule 43)
+- [ ] **Zero-Allocation Slicing**: Cắt chuỗi và parse dữ liệu hot-path dùng `ReadOnlySpan<char>` / `ISpanParsable<T>` thay cho `Substring`/`Split`; dựng chuỗi bằng `string.Create`; `stackalloc` chỉ dùng với kích thước an toàn ≤ 256 bytes (Rule 44)
+- [ ] **Hot-Path Optimization**: Dùng `static lambda` chống closure allocation; không boxing enum/struct; không dùng LINQ trong hot loop; tối ưu hiệu năng có số liệu chứng minh từ `BenchmarkDotNet` với `[MemoryDiagnoser]` đạt `Allocated = 0 B` (Rule 45)
 
 
