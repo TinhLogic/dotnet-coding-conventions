@@ -79,6 +79,9 @@ catch (HttpRequestException ex)
 
 ### 26.3. Global exception handler & `ProblemDetails` (RFC 9457)
 
+> [!TIP]
+> Xem tài liệu quy chuẩn toàn diện về cấu trúc 5 trường chuẩn, extension members (`traceId`, `timestamp`, `invalidParams`), và tích hợp FluentValidation theo chuẩn **RFC 9457** tại: [18-rfc9457-api-problem-details.md](./18-rfc9457-api-problem-details.md).
+
 **ASP.NET Core thuần (.NET 8+)**: dùng `IExceptionHandler`, response theo chuẩn `ProblemDetails`.
 
 ```csharp

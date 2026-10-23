@@ -142,3 +142,9 @@ services.AddSwaggerGen(c =>
 });
 ```
 
+---
+
+> [!TIP]
+> **Quy chuẩn phản hồi lỗi API**: Mọi API trả về lỗi ($4xx, 5xx$) bắt buộc phải tuân theo chuẩn **RFC 9457 Problem Details** (`Content-Type: application/problem+json`). Xem hướng dẫn chi tiết tại: [18-rfc9457-api-problem-details.md](./18-rfc9457-api-problem-details.md).
+
+

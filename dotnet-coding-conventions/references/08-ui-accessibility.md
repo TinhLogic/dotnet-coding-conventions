@@ -1,5 +1,8 @@
 # Phần IX. Giao Diện Người Dùng & Dữ Liệu Bảng (UI, Data Grid & Accessibility)
 
+> [!TIP]
+> Quy chuẩn UI, UX & Web Accessibility đã được tách thành **Skill độc lập đa ngôn ngữ**: [`ui-ux-accessibility`](../../ui-ux-accessibility/SKILL.md). Skill này áp dụng cho mọi nền tảng frontend (Blazor, React, Vue, Angular, Svelte, HTML/CSS). Phần này trong .NET conventions giữ lại các hướng dẫn chi tiết dành riêng cho hệ sinh thái C# / Blazor.
+
 Tài liệu chi tiết về tối ưu hóa nạp dữ liệu bảng (Server-Side Query & Virtualization), chuẩn tiếp cận Web WAI-ARIA, Clean Data Representation và quy chuẩn Biểu tượng (SVG Icons).
 
 ---
