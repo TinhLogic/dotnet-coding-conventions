@@ -111,14 +111,14 @@ Các quy chuẩn cốt lõi trong tài liệu này kế thừa trực tiếp và
 ### 1. Cài đặt toàn cục cho Google Antigravity / Gemini CLI:
 Tạo symlink từ thư mục skill toàn cục của Antigravity trỏ vào thư mục repository này:
 ```bash
-ln -s ~/Documents/Github/dotnet-coding-conventions ~/.gemini/config/skills/dotnet-coding-conventions
+ln -s ~/Documents/Github/skills ~/.gemini/config/skills/dotnet-coding-conventions
 ```
 
 ### 2. Sử dụng trong dự án cụ thể (Project Scope):
 Sao chép hoặc tạo symlink vào thư mục `.agents/skills/` hoặc `.gemini/skills/` của project mục tiêu:
 ```bash
 mkdir -p .agents/skills
-ln -s ~/Documents/Github/dotnet-coding-conventions .agents/skills/dotnet-coding-conventions
+ln -s ~/Documents/Github/skills .agents/skills/dotnet-coding-conventions
 ```
 
 ---
@@ -228,14 +228,14 @@ The conventions codified in this repository directly inherit and align with offi
 ### 1. Global Setup for Antigravity / Gemini CLI:
 Create a symlink from the global skill directory pointing to this repository:
 ```bash
-ln -s ~/Documents/Github/dotnet-coding-conventions ~/.gemini/config/skills/dotnet-coding-conventions
+ln -s ~/Documents/Github/skills ~/.gemini/config/skills/dotnet-coding-conventions
 ```
 
 ### 2. Workspace / Repository Scope:
 Copy or symlink into the target project's `.agents/skills/` or `.gemini/skills/` directory:
 ```bash
 mkdir -p .agents/skills
-ln -s ~/Documents/Github/dotnet-coding-conventions .agents/skills/dotnet-coding-conventions
+ln -s ~/Documents/Github/skills .agents/skills/dotnet-coding-conventions
 ```
 
 ---
