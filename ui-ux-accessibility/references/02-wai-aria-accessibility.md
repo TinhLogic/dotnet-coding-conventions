@@ -100,20 +100,21 @@ Mọi thành phần giao diện (đặc biệt là Table, Modal, Dropdown, Form 
 
 ---
 
-## 3. Quy Chuẩn WAI-ARIA Cho Dropdown & Custom Form Controls
+## 3. Quy Chuẩn WAI-ARIA Cho Custom Select, Combobox & Dropdown Menu
 
-Khi xây dựng các menu thả xuống tùy biến (Custom Select / Dropdown):
-- **Nút kích hoạt (Trigger Button)**:
-  - Bắt buộc có thuộc tính `aria-haspopup="listbox"` (nếu là chọn giá trị) hoặc `aria-haspopup="menu"` (nếu là menu chức năng).
-  - Có thuộc tính `aria-expanded="false"` khi đóng và `aria-expanded="true"` khi mở.
-- **Danh sách lựa chọn (Option List Container)**:
-  - Container danh sách phải mang thuộc tính `role="listbox"`.
-  - Mỗi mục lựa chọn bên trong mang `role="option"`.
-  - Mục hiện đang được chọn phải có thuộc tính `aria-selected="true"`, các mục còn lại là `aria-selected="false"`.
-- **Hành vi bàn phím (Keyboard Navigation)**:
-  - `ArrowDown` / `ArrowUp`: Di chuyển lựa chọn giữa các item.
-  - `Enter` hoặc `Space`: Chọn item đang focus và đóng dropdown.
-  - `Escape`: Đóng dropdown và trả focus về nút kích hoạt ban đầu.
+- ❌ **CẤM sử dụng thẻ `<select>` / `<option>` hiển thị mặc định của hệ thống (Native OS Dropdown)** vì không đồng bộ Design Tokens/Dark Mode và thiếu tính năng tìm kiếm/ảo hóa dữ liệu.
+- ✅ **BẮT BUỘC sử dụng Custom Select / Combobox / Dropdown Menu** (chi tiết kiến trúc Shadcn UI & Google Material 3 xem tại [13-custom-select-combobox.md](./13-custom-select-combobox.md)):
+  - **Nút kích hoạt (Trigger Button)**:
+    - Bắt buộc là `<button type="button">` có `role="combobox"` + `aria-haspopup="listbox"` (nếu là chọn giá trị Form) hoặc `aria-haspopup="menu"` (nếu là menu hành động).
+    - Có thuộc tính `aria-expanded="false"` khi đóng, `aria-expanded="true"` khi mở, và `aria-controls="[id_listbox]"`.
+  - **Danh sách lựa chọn (Option List Container)**:
+    - Chọn giá trị (< 8 mục: Custom Select; $\ge 8$ mục: Searchable Combobox): Container mang `role="listbox"`, mỗi mục bên trong mang `role="option"`, mục đang chọn có `aria-selected="true"` kèm icon dấu tích (`Check` SVG).
+    - Menu hành động (Action Menu): Container mang `role="menu"`, mỗi mục mang `role="menuitem"`.
+  - **Hành vi bàn phím & Quản lý Focus**:
+    - `ArrowDown` / `ArrowUp`: Di chuyển vạch sáng lựa chọn giữa các mục; `Home` / `End` nhảy về đầu/cuối.
+    - `Enter` (hoặc `Space`): Chốt chọn mục đang highlight, đóng menu và trả focus về nút Trigger.
+    - `Escape`: Đóng dropdown ngay lập tức và trả focus về nút kích hoạt ban đầu.
+    - Bấm ra ngoài (`Click-outside`) hoặc nhấn `Tab` phải tự động đóng dropdown.
 
 ---
 

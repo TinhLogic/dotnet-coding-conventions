@@ -8,12 +8,12 @@ description: >-
   Error Boundaries, Telemetry & RUM, Frontend Security (XSS DOMPurify, CSP, secure token storage, PII masking), and Core Web Vitals (LCP, INP, CLS).
   Auto-triggers whenever working with: UI, UX, frontend, HTML, CSS, React, Next.js, Vue, Nuxt, Angular, Svelte, Blazor, Tailwind,
   accessibility, a11y, WAI-ARIA, WCAG, screen reader, table, data grid, virtual scroll, skeleton shimmer, debounce, badges, SVG icons,
-  modal, dialog, dropdown, design tokens, dark mode, unsaved changes guard, command palette, i18n, l10n, Intl, error boundary,
+  modal, dialog, dropdown, custom select, combobox, listbox, design tokens, dark mode, unsaved changes guard, command palette, i18n, l10n, Intl, error boundary,
   telemetry, XSS, DOMPurify, CSP, Core Web Vitals, LCP, INP, CLS.
   Tự động kích hoạt khi prompt tiếng Việt liên quan đến: thiết kế giao diện, làm UI/UX, bảng dữ liệu, table, data grid,
   danh sách dữ liệu, phân trang server-side, cuộn ảo hóa, virtual scroll, hiệu ứng skeleton, shimmer loading, tìm kiếm debounce,
   chuẩn tiếp cận trợ năng, accessibility, a11y, WAI-ARIA, đọc màn hình screen reader, hộp thoại modal, dialog, popup xác nhận,
-  menu dropdown, select box, nút bấm icon, biểu tượng SVG, Lucide, Heroicons, gắn badge, thẻ trạng thái, hiển thị dữ liệu bảng, WCAG,
+  menu dropdown, custom dropdown, custom select, combobox tìm kiếm, select box, nút bấm icon, biểu tượng SVG, Lucide, Heroicons, gắn badge, thẻ trạng thái, hiển thị dữ liệu bảng, WCAG,
   design tokens, giao diện dark mode, tương phản cao, cảnh báo chưa lưu dữ liệu unsaved changes, form validation, bảng lệnh command palette Cmd+K,
   đồng bộ URL query parameters, deep linking, đa ngôn ngữ i18n, định dạng tiền tệ ngày giờ Intl, error boundary chống sập trang,
   bảo mật XSS, DOMPurify, CSP, che dữ liệu nhạy cảm PII, tối ưu hiệu năng web Core Web Vitals LCP INP CLS,
@@ -25,7 +25,7 @@ description: >-
 
 Quy chuẩn bắt buộc cho mọi giao diện Web, thành phần Frontend và trải nghiệm người dùng (UX) được sinh ra hoặc chỉnh sửa bởi AI Agent trên mọi nền tảng kỹ thuật (**React, Vue, Angular, Blazor, Svelte, Next.js, Plain HTML/CSS/JS**).
 
-Áp dụng mô hình **Progressive Disclosure**: file `SKILL.md` này tóm tắt 12 trụ cột cốt lõi, bảng tra cứu nhanh và checklist nghiệm thu. Hướng dẫn chi tiết kèm ví dụ đa ngôn ngữ nằm trong thư mục [references/](./references/).
+Áp dụng mô hình **Progressive Disclosure**: file `SKILL.md` này tóm tắt 13 trụ cột cốt lõi, bảng tra cứu nhanh và checklist nghiệm thu. Hướng dẫn chi tiết kèm ví dụ đa ngôn ngữ nằm trong thư mục [references/](./references/).
 
 ---
 
@@ -45,6 +45,7 @@ Quy chuẩn bắt buộc cho mọi giao diện Web, thành phần Frontend và t
 | **X** | **Bảo Mật Tầng Giao Diện & Riêng Tư** | HttpOnly Cookie / RAM token, XSS DOMPurify, CSP Headers, Che giấu PII | [10-frontend-security-hardening.md](./references/10-frontend-security-hardening.md) |
 | **XI** | **Tối Ưu Hiệu Năng & Core Web Vitals** | LCP < 2.5s, INP < 200ms, CLS < 0.1, Code-splitting, Zero-CLS Images | [11-core-web-vitals-performance.md](./references/11-core-web-vitals-performance.md) |
 | **XII** | **Quy Chuẩn Skeleton Loading** | Content-Aware (CLS=0), WAI-ARIA Screen Reader, CSS Shimmer, Reduced Motion | [12-skeleton-loading-patterns.md](./references/12-skeleton-loading-patterns.md) |
+| **XIII** | **Custom Select, Combobox & Dropdown Menu** | Cấm `<select>` mặc định, phân tầng 3 lớp (Shadcn/Google), Portal/Flip, Keyboard A11y | [13-custom-select-combobox.md](./references/13-custom-select-combobox.md) |
 
 ---
 
@@ -60,7 +61,7 @@ Quy chuẩn bắt buộc cho mọi giao diện Web, thành phần Frontend và t
 ### 2. Tiếp Cận Trợ Năng (WAI-ARIA WCAG 2.1 AA)
 - ✅ **Table**: Dùng thẻ ngữ nghĩa HTML5, `th[scope="col"]`, `aria-label`/`caption`, `aria-busy` khi nạp và `aria-live="polite"` cho tổng số dòng.
 - ✅ **Modal**: Container mang `role="dialog"`, `aria-modal="true"`, `aria-labelledby`, bẫy tiêu điểm **Focus Trap**, phím `Escape` đóng và nút đóng có `aria-label="Đóng"`.
-- ✅ **Dropdown**: `aria-haspopup="listbox"`, `aria-expanded`, `role="listbox"`, `role="option"`, `aria-selected`.
+- ✅ **Custom Select / Dropdown**: ❌ **CẤM dùng `<select>` mặc định**; bắt buộc dùng Custom Select/Combobox có `role="combobox"`, `aria-haspopup="listbox"`, `aria-expanded`, `role="listbox"`, `role="option"`, `aria-selected`.
 - ✅ **Nút icon-only**: Bắt buộc có thuộc tính `aria-label="..."` hoặc thẻ con `.sr-only`.
 
 ### 3. Trình Bày Dữ Liệu Sạch (Clean Data)
@@ -114,6 +115,14 @@ Quy chuẩn bắt buộc cho mọi giao diện Web, thành phần Frontend và t
 - ✅ **CSS Shimmer Wave & Reduced Motion**: Hiệu ứng quét sáng mượt mà bằng `transform: translateX()`; bắt buộc tắt animation quét sáng khi người dùng kích hoạt `prefers-reduced-motion: reduce`.
 - ❌ **CẤM**: Chớp nháy skeleton khi thời gian tải quá ngắn (< 150ms); cấm để skeleton chạy mãi mãi mà không có timeout (8–10s) fallback sang nút "Thử lại".
 
+### 13. Quy Chuẩn Custom Select, Combobox & Dropdown Menu (Mô Hình Shadcn & Google)
+- ❌ **CẤM dùng `<select>` / `<option>` mặc định của hệ thống**: Bắt buộc thay thế 100% bằng Custom Select / Combobox đồng bộ với Design Tokens và Light/Dark mode.
+- ✅ **Ma trận phân loại 3 tầng**:
+  - **Danh sách ngắn (< 8 mục tĩnh)**: Dùng **Custom Select (`role="listbox"`)** có icon `ChevronDown` xoay `180deg` khi mở và dấu tích `Check` SVG ở mục đang chọn.
+  - **Danh sách dài ($\ge 8$ mục hoặc tải từ API)**: Bắt buộc dùng **Searchable Combobox (`Popover` + Search Input)** tự động `autofocus` ô tìm kiếm khi mở, hỗ trợ Debounce 300ms, Empty State và nút xóa nhanh (`Clear ×`).
+  - **Menu hành động (Nút `...`, User menu)**: Dùng **Action Dropdown Menu (`role="menu"` > `role="menuitem"`)**, tách biệt hoàn toàn với Form Select.
+- ✅ **Chống cắt khung nhìn & Bảo toàn Form**: Dùng Portal / Popover API / Flip placement để không bị cắt bởi `overflow: hidden`; luôn kèm `<input type="hidden">` để đồng bộ `FormData` & Dirty State; hỗ trợ đầy đủ bàn phím (`ArrowUp/Down`, `Home/End`, `Enter`, `Escape` trả focus) và tự đóng khi click ra ngoài (`Click-outside`).
+
 ---
 
 ## 📋 Checklist Nghiệm Thu Chuẩn Enterprise (Audit Checklist)
@@ -135,3 +144,4 @@ Quy chuẩn bắt buộc cho mọi giao diện Web, thành phần Frontend và t
 - [ ] Token xác thực có được bảo vệ an toàn (tránh `localStorage`) và chuỗi HTML có được lọc qua `DOMPurify` không?
 - [ ] Ảnh có kích thước cố định để đảm bảo chỉ số CLS < 0.1 không?
 - [ ] Skeleton loading có khớp kích thước thực tế (Zero CLS), khai báo `aria-busy="true"` và tôn trọng `prefers-reduced-motion` không?
+- [ ] Đã loại bỏ hoàn toàn thẻ `<select>` mặc định và thay bằng Custom Select (< 8 mục) hoặc Searchable Combobox ($\ge 8$ mục) chuẩn WAI-ARIA, hỗ trợ bàn phím, chống bị cắt khung nhìn và đồng bộ `<input type="hidden">` chưa?

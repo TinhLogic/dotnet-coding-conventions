@@ -32,7 +32,7 @@ window.addEventListener('beforeunload', (event) => {
 ## 2. Xác Thực Trực Quan Chuẩn Trợ Năng (Accessible Inline Validation)
 
 Khi một ô nhập liệu có lỗi xác thực:
-- Thẻ `<input>`, `<select>` hoặc `<textarea>` bắt buộc phải có thuộc tính `aria-invalid="true"`.
+- Thẻ `<input>`, `<textarea>` hoặc nút Trigger của **Custom Select / Combobox** (`role="combobox"`) bắt buộc phải có thuộc tính `aria-invalid="true"`.
 - Thẻ hiển thị thông báo lỗi phải có `id` duy nhất và được liên kết với ô nhập thông qua `aria-describedby="[error_id]"`.
 - Không chỉ dựa vào màu đỏ để báo lỗi (vi phạm WCAG cho người mù màu); bắt buộc có nhãn văn bản giải thích rõ nguyên nhân và cách khắc phục.
 
@@ -85,4 +85,13 @@ Trong các form doanh nghiệp phức tạp (50 – 100 trường nhập liệu,
   - **React**: Sử dụng `react-hook-form` (Uncontrolled inputs) để cô lập việc render tại từng ô input độc lập.
   - **Blazor**: Dùng `EditForm` đi kèm `InputText` với cơ chế binding hợp lý, tránh gọi `StateHasChanged()` trên toàn trang khi thay đổi field con.
   - **Vue**: Sử dụng `v-model.lazy` hoặc form context biệt lập.
+
+---
+
+## 5. Quy Chuẩn Chọn Dữ Liệu Trong Biểu Mẫu (Cấm Native `<select>`, Dùng Custom Select / Combobox)
+
+- ❌ **CẤM sử dụng thẻ `<select>` / `<option>` mặc định của hệ thống** trên giao diện biểu mẫu.
+- ✅ **BẮT BUỘC phân tầng theo số lượng dữ liệu** (chi tiết tại [13-custom-select-combobox.md](./13-custom-select-combobox.md)):
+  - **Dưới 8 mục cố định (< 8 items)**: Dùng **Custom Select (`role="listbox"`)** có icon `ChevronDown` xoay khi mở, dấu tích `Check` ở mục đang chọn và đồng bộ với `<input type="hidden">`.
+  - **Từ 8 mục trở lên ($\ge 8$ items) hoặc dữ liệu động từ Server**: Dùng **Searchable Combobox (`Popover` + Search Input)** tự động focus vào ô tìm kiếm khi mở, hỗ trợ Debounce 300ms và nút xóa nhanh (`Clear ×`).
 
