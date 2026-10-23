@@ -8,12 +8,12 @@ description: >-
   Error Boundaries, Telemetry & RUM, Frontend Security (XSS DOMPurify, CSP, secure token storage, PII masking), and Core Web Vitals (LCP, INP, CLS).
   Auto-triggers whenever working with: UI, UX, frontend, HTML, CSS, React, Next.js, Vue, Nuxt, Angular, Svelte, Blazor, Tailwind,
   accessibility, a11y, WAI-ARIA, WCAG, screen reader, table, data grid, virtual scroll, skeleton shimmer, debounce, badges, SVG icons,
-  modal, dialog, dropdown, custom select, combobox, listbox, design tokens, dark mode, unsaved changes guard, command palette, i18n, l10n, Intl, error boundary,
+  modal, dialog, dropdown, custom select, combobox, listbox, drawer, side sheet, empty state, toast, snackbar, tabular-nums, design tokens, dark mode, unsaved changes guard, command palette, i18n, l10n, Intl, error boundary,
   telemetry, XSS, DOMPurify, CSP, Core Web Vitals, LCP, INP, CLS.
   Tự động kích hoạt khi prompt tiếng Việt liên quan đến: thiết kế giao diện, làm UI/UX, bảng dữ liệu, table, data grid,
   danh sách dữ liệu, phân trang server-side, cuộn ảo hóa, virtual scroll, hiệu ứng skeleton, shimmer loading, tìm kiếm debounce,
   chuẩn tiếp cận trợ năng, accessibility, a11y, WAI-ARIA, đọc màn hình screen reader, hộp thoại modal, dialog, popup xác nhận,
-  menu dropdown, custom dropdown, custom select, combobox tìm kiếm, select box, nút bấm icon, biểu tượng SVG, Lucide, Heroicons, gắn badge, thẻ trạng thái, hiển thị dữ liệu bảng, WCAG,
+  menu dropdown, custom dropdown, custom select, combobox tìm kiếm, select box, ngăn kéo drawer, side sheet, trạng thái trống empty state, thông báo toast, hoàn tác undo, căn lề bảng, tabular-nums, nút bấm icon, biểu tượng SVG, Lucide, Heroicons, gắn badge, thẻ trạng thái, hiển thị dữ liệu bảng, WCAG,
   design tokens, giao diện dark mode, tương phản cao, cảnh báo chưa lưu dữ liệu unsaved changes, form validation, bảng lệnh command palette Cmd+K,
   đồng bộ URL query parameters, deep linking, đa ngôn ngữ i18n, định dạng tiền tệ ngày giờ Intl, error boundary chống sập trang,
   bảo mật XSS, DOMPurify, CSP, che dữ liệu nhạy cảm PII, tối ưu hiệu năng web Core Web Vitals LCP INP CLS,
@@ -25,7 +25,7 @@ description: >-
 
 Quy chuẩn bắt buộc cho mọi giao diện Web, thành phần Frontend và trải nghiệm người dùng (UX) được sinh ra hoặc chỉnh sửa bởi AI Agent trên mọi nền tảng kỹ thuật (**React, Vue, Angular, Blazor, Svelte, Next.js, Plain HTML/CSS/JS**).
 
-Áp dụng mô hình **Progressive Disclosure**: file `SKILL.md` này tóm tắt 13 trụ cột cốt lõi, bảng tra cứu nhanh và checklist nghiệm thu. Hướng dẫn chi tiết kèm ví dụ đa ngôn ngữ nằm trong thư mục [references/](./references/).
+Áp dụng mô hình **Progressive Disclosure**: file `SKILL.md` này tóm tắt 14 trụ cột cốt lõi, bảng tra cứu nhanh và checklist nghiệm thu. Hướng dẫn chi tiết kèm ví dụ đa ngôn ngữ nằm trong thư mục [references/](./references/).
 
 ---
 
@@ -46,6 +46,7 @@ Quy chuẩn bắt buộc cho mọi giao diện Web, thành phần Frontend và t
 | **XI** | **Tối Ưu Hiệu Năng & Core Web Vitals** | LCP < 2.5s, INP < 200ms, CLS < 0.1, Code-splitting, Zero-CLS Images | [11-core-web-vitals-performance.md](./references/11-core-web-vitals-performance.md) |
 | **XII** | **Quy Chuẩn Skeleton Loading** | Content-Aware (CLS=0), WAI-ARIA Screen Reader, CSS Shimmer, Reduced Motion | [12-skeleton-loading-patterns.md](./references/12-skeleton-loading-patterns.md) |
 | **XIII** | **Custom Select, Combobox & Dropdown Menu** | Cấm `<select>` mặc định, phân tầng 3 lớp (Shadcn/Google), Portal/Flip, Keyboard A11y | [13-custom-select-combobox.md](./references/13-custom-select-combobox.md) |
+| **XIV** | **Micro-UX, Bố Cục Phòng Thủ & Chuẩn Big Tech** | `tabular-nums`, Undo Toast, Actionable Empty State, 1 Primary CTA, Side Sheet, Hit Area | [14-enterprise-micro-ux-defensive-ui.md](./references/14-enterprise-micro-ux-defensive-ui.md) |
 
 ---
 
@@ -123,6 +124,14 @@ Quy chuẩn bắt buộc cho mọi giao diện Web, thành phần Frontend và t
   - **Menu hành động (Nút `...`, User menu)**: Dùng **Action Dropdown Menu (`role="menu"` > `role="menuitem"`)**, tách biệt hoàn toàn với Form Select.
 - ✅ **Chống cắt khung nhìn & Bảo toàn Form**: Dùng Portal / Popover API / Flip placement để không bị cắt bởi `overflow: hidden`; luôn kèm `<input type="hidden">` để đồng bộ `FormData` & Dirty State; hỗ trợ đầy đủ bàn phím (`ArrowUp/Down`, `Home/End`, `Enter`, `Escape` trả focus) và tự đóng khi click ra ngoài (`Click-outside`).
 
+### 14. Micro-UX, Bố Cục Phòng Thủ & Luồng Tương Tác Chuẩn Big Tech (Google, Stripe, Linear)
+- ✅ **Số liệu thẳng hàng (`tabular-nums`) & Căn lề bảng**: Mọi cột tiền tệ, số lượng, tỷ lệ % bắt buộc căn phải (`text-align: end`) kèm `font-variant-numeric: tabular-nums`; cột chữ căn trái (`text-align: start`); `<th>` và `<td>` cùng cột phải đồng nhất hướng căn lề.
+- ✅ **Phân cấp thao tác nguy hiểm**: Xóa mềm / Lưu trữ dùng **Optimistic UI + Undo Toast (5–8s, tạm dừng khi hover)** không bật popup hỏi trước; Xóa vĩnh viễn dùng `role="alertdialog"` đặt `autofocus` mặc định ở nút **"Hủy"** (hoặc yêu cầu gõ lại tên tài nguyên).
+- ✅ **Actionable Empty States**: Cấm chỉ ghi *"Không có dữ liệu"*; bắt buộc phân biệt 3 trạng thái trống (**Chưa có dữ liệu gốc** -> nút *"+ Tạo mới"*; **Không khớp bộ lọc** -> nút *"Xóa bộ lọc"*; **Lỗi tải** -> nút *"Thử lại"*).
+- ✅ **1 Primary CTA & Khóa nút chống bấm đúp**: Mỗi vùng nhìn/Modal chỉ có tối đa 1 nút `Primary`; khi bấm Submit phải lập tức `disabled` + hiện `Inline Spinner` giữ nguyên chiều rộng nút (`visibility: hidden` trên chữ).
+- ✅ **Side Sheet / Drawer & Cấm Modal chồng Modal**: Tuyệt đối cấm mở Modal đè lên Modal; ưu tiên dùng **Slide-over Drawer / Sheet** trượt từ cạnh phải khi xem/sửa chi tiết dòng bảng dữ liệu.
+- ✅ **Định luật Fitts & Bố cục phòng thủ**: Vùng chạm thực tế tối thiểu `36x36px` (Desktop) / `44x44px` (Mobile), khoảng cách giữa các nút $\ge 8\text{px}$; phòng thủ tràn chữ bằng `min-width: 0`, `text-overflow: ellipsis` kèm Tooltip.
+
 ---
 
 ## 📋 Checklist Nghiệm Thu Chuẩn Enterprise (Audit Checklist)
@@ -145,3 +154,4 @@ Quy chuẩn bắt buộc cho mọi giao diện Web, thành phần Frontend và t
 - [ ] Ảnh có kích thước cố định để đảm bảo chỉ số CLS < 0.1 không?
 - [ ] Skeleton loading có khớp kích thước thực tế (Zero CLS), khai báo `aria-busy="true"` và tôn trọng `prefers-reduced-motion` không?
 - [ ] Đã loại bỏ hoàn toàn thẻ `<select>` mặc định và thay bằng Custom Select (< 8 mục) hoặc Searchable Combobox ($\ge 8$ mục) chuẩn WAI-ARIA, hỗ trợ bàn phím, chống bị cắt khung nhìn và đồng bộ `<input type="hidden">` chưa?
+- [ ] Cột số/tiền tệ đã căn phải kèm `tabular-nums`, Empty State có nút hành động CTA, nút Submit có khóa chống bấm đúp giữ nguyên chiều rộng, và không có Modal chồng Modal chưa?

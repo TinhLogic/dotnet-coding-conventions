@@ -83,3 +83,15 @@ Khi sử dụng Badge cho trạng thái vòng đời, màu sắc phải tuân th
 | **Neutral / Inactive** | Bản nháp, ngưng hoạt động | Xám (`slate` / `gray`) | `Bản nháp`, `Ngưng hoạt động`, `Lưu trữ` |
 | **Info / Progress** | Đang tiến hành, thông tin | Xanh dương (`blue` / `sky`) | `Đang vận chuyển`, `Đang xử lý` |
 
+---
+
+## 4. Căn Lề Cột Chuẩn Xác, Số Liệu Thẳng Hàng (`tabular-nums`) & Chống Tràn Chữ
+
+Để bảng dữ liệu có khả năng quét mắt nhanh (Scannability) theo chuẩn Stripe & Google Cloud (chi tiết tại [14-enterprise-micro-ux-defensive-ui.md](./14-enterprise-micro-ux-defensive-ui.md)):
+- **Bắt buộc `font-variant-numeric: tabular-nums`** cho toàn bộ cột số tiền, số lượng, tỷ lệ %, ngày tháng và mã số để các chữ số thẳng hàng dọc tuyệt đối.
+- **Ma trận căn lề đồng nhất giữa `<th>` và `<td>`**:
+  - Văn bản (Họ tên, Email, Tên SP): **Căn trái (`text-align: start`)**.
+  - Số lượng, Tiền tệ, Phần trăm: **Bắt buộc căn phải (`text-align: end`)** kèm `tabular-nums`.
+  - Cột hành động (Actions): **Căn phải (`text-align: end`)**.
+- **Chống tràn văn bản**: Các ô văn bản dài bắt buộc giới hạn `max-width` kèm `text-overflow: ellipsis` và thuộc tính `title` / Tooltip; tuyệt đối không để chuỗi dài đẩy vỡ cột bảng.
+

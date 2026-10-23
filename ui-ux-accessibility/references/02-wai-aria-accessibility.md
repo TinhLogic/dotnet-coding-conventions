@@ -69,10 +69,11 @@ Mọi thành phần giao diện (đặc biệt là Table, Modal, Dropdown, Form 
 - **Nút đóng Modal**:
   - Phải có nhãn văn bản tường minh bằng `aria-label="Đóng"` hoặc `aria-label="Close"`.
   - ❌ **CẤM**: Để nút đóng chỉ chứa ký tự `&times;` hoặc `×` mà không có nhãn văn bản.
-- **Bẫy tiêu điểm (Focus Trap) & Phím Escape**:
-  - Khi Modal mở ra, tiêu điểm bàn phím (Focus) tự động chuyển vào phần tử tương tác đầu tiên bên trong modal (thường là ô input đầu tiên hoặc nút đóng).
+- **Bẫy tiêu điểm (Focus Trap), Phím Escape & Quy tắc Chống Xếp Chồng**:
+  - Khi Modal mở ra, tiêu điểm bàn phím (Focus) tự động chuyển vào phần tử tương tác đầu tiên bên trong modal (với `role="alertdialog"` xóa vĩnh viễn dữ liệu, **bắt buộc đặt focus mặc định vào nút `"Hủy"`** để tránh bấm nhầm `Enter`).
   - Nhấn phím `Tab` hoặc `Shift + Tab` chỉ được di chuyển luẩn quẩn bên trong Modal, không được lọt ra ngoài nền trang.
   - Nhấn phím `Escape` (`Esc`) phải đóng modal ngay lập tức và trả tiêu điểm về phần tử đã kích hoạt modal trước đó.
+  - ❌ **CẤM Modal chồng Modal (No Nested Modals)**: Không mở Modal thứ 2 đè lên Modal thứ 1; ưu tiên dùng **Slide-over Drawer / Side Sheet** cho luồng xem chi tiết hoặc form nhiều trường (xem [14-enterprise-micro-ux-defensive-ui.md](./14-enterprise-micro-ux-defensive-ui.md)).
 
 ```html
 <!-- Cấu trúc Modal chuẩn WAI-ARIA -->

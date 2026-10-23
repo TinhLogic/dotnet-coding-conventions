@@ -95,3 +95,11 @@ Trong các form doanh nghiệp phức tạp (50 – 100 trường nhập liệu,
   - **Dưới 8 mục cố định (< 8 items)**: Dùng **Custom Select (`role="listbox"`)** có icon `ChevronDown` xoay khi mở, dấu tích `Check` ở mục đang chọn và đồng bộ với `<input type="hidden">`.
   - **Từ 8 mục trở lên ($\ge 8$ items) hoặc dữ liệu động từ Server**: Dùng **Searchable Combobox (`Popover` + Search Input)** tự động focus vào ô tìm kiếm khi mở, hỗ trợ Debounce 300ms và nút xóa nhanh (`Clear ×`).
 
+---
+
+## 6. Phân Cấp Nút Bấm (1 Primary CTA) & Chống Bấm Đúp Gửi Lặp (Double-Submit Lock)
+
+Theo chuẩn Stripe Checkout & Google Material 3 (chi tiết tại [14-enterprise-micro-ux-defensive-ui.md](./14-enterprise-micro-ux-defensive-ui.md)):
+- **Chỉ 1 nút Primary CTA trên mỗi Form / Modal**: Các nút phụ như *"Hủy"*, *"Lưu nháp"*, *"Đặt lại"* bắt buộc hạ cấp xuống `Secondary` hoặc `Ghost`. Đặt nút *"Hủy"* bên trái, nút *"Lưu / Gửi"* (Primary) ngoài cùng bên phải.
+- **Khóa nút tức thì khi Submit (Idempotent Button Lock)**: Ngay khi bấm Submit, chuyển nút sang `disabled` (`aria-disabled="true"`, `aria-busy="true"`), hiển thị `Inline Spinner` nhưng **giữ nguyên chiều rộng nút** (`visibility: hidden` trên nhãn chữ + `position: absolute` cho spinner) để chống gửi trùng request và không làm co giật layout.
+
