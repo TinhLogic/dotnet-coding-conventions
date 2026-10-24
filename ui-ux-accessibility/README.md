@@ -13,7 +13,7 @@
 
 Bộ quy chuẩn toàn diện về thiết kế giao diện người dùng (UI), trải nghiệm người dùng (UX), khả năng tiếp cận web (**WAI-ARIA / WCAG 2.1 AA**) và kiến trúc Frontend doanh nghiệp dành cho mọi ứng dụng web hiện đại. Bộ skill này được thiết kế độc lập, áp dụng trên mọi ngôn ngữ và framework frontend (**React, Vue, Angular, Blazor, Svelte, Next.js, Plain HTML/CSS**).
 
-## 🎯 11 Trụ Cột Doanh Nghiệp
+## 🎯 16 Trụ Cột Doanh Nghiệp
 
 | Phần | Trụ Cột Quy Chuẩn | Phạm Vi Áp Dụng | Tài Liệu Chi Tiết |
 | :--- | :--- | :--- | :--- |
@@ -29,6 +29,10 @@ Bộ quy chuẩn toàn diện về thiết kế giao diện người dùng (UI),
 | **X** | **Bảo Mật Tầng Giao Diện & Riêng Tư** | HttpOnly Cookie / RAM token, XSS DOMPurify, CSP Headers, Che giấu PII | [`10-frontend-security-hardening.md`](./references/10-frontend-security-hardening.md) |
 | **XI** | **Tối Ưu Hiệu Năng & Core Web Vitals** | LCP < 2.5s, INP < 200ms, CLS < 0.1, Code-splitting, Zero-CLS Images | [`11-core-web-vitals-performance.md`](./references/11-core-web-vitals-performance.md) |
 | **XII** | **Quy Chuẩn Skeleton Loading** | Khớp hình dạng nội dung (CLS=0), WAI-ARIA Screen Reader, CSS Shimmer, Reduced motion | [`12-skeleton-loading-patterns.md`](./references/12-skeleton-loading-patterns.md) |
+| **XIII** | **Custom Select, Combobox & Dropdown** | Cấm `<select>` mặc định, phân tầng 3 lớp (Shadcn/Google), Keyboard Nav, Popover Portal | [`13-custom-select-combobox.md`](./references/13-custom-select-combobox.md) |
+| **XIV** | **Micro-UX, Bố Cục Phòng Thủ & Big Tech** | `tabular-nums`, Undo Toast, Actionable Empty State, 1 Primary CTA, Side Sheet, Hit Area | [`14-enterprise-micro-ux-defensive-ui.md`](./references/14-enterprise-micro-ux-defensive-ui.md) |
+| **XV** | **Responsive Bảng & Trang Dữ Liệu Lớn** | Chuẩn Google (Sheets/GCP/GA4), Sticky Columns/Header, Scroll Shadows, Table-to-Card, Cursor `pageToken` | [`15-responsive-big-data-tables-pages.md`](./references/15-responsive-big-data-tables-pages.md) |
+| **XVI** | **Tìm Kiếm Phân Nhánh & Dropdown Dữ Liệu Lớn** | Chuẩn Google Omnibox, Filter Chips Bar, Guided Auto-complete, AbortController, Virtual Dropdown, Mobile Bottom Sheet | [`16-google-faceted-search-dropdowns.md`](./references/16-google-faceted-search-dropdowns.md) |
 
 Bản tóm tắt, cheatsheet và checklist nghiệm thu nhanh nằm tại [`SKILL.md`](./SKILL.md).
 
@@ -38,7 +42,7 @@ Bản tóm tắt, cheatsheet và checklist nghiệm thu nhanh nằm tại [`SKIL
 
 Enterprise UI, UX, Web Accessibility (**WAI-ARIA / WCAG 2.1 AA**), and Frontend Architecture standards for modern web applications. Designed as a universal, cross-framework skill for AI Coding Assistants and engineering teams across **React, Vue, Angular, Blazor, Svelte, Next.js, and Plain HTML/CSS**.
 
-## 🎯 12 Core Enterprise Pillars
+## 🎯 16 Core Enterprise Pillars
 
 1. **High-Performance Data Grids**: $O(1)$ DOM memory via virtual scrolling, server-side pagination, shimmer skeletons, and 300ms debouncing.
 2. **Web Accessibility (WCAG 2.1 AA)**: Semantic HTML5, full keyboard navigation, screen reader live regions, and modal focus traps.
@@ -52,5 +56,7 @@ Enterprise UI, UX, Web Accessibility (**WAI-ARIA / WCAG 2.1 AA**), and Frontend 
 10. **Frontend Security**: Safe token storage in HttpOnly cookies / RAM, XSS sanitization via `DOMPurify`, strict CSP headers, and PII masking.
 11. **Core Web Vitals**: LCP < 2.5s, INP < 200ms, CLS < 0.1, route-based code-splitting, zero-layout-shift image sizing, and memory leak prevention.
 12. **Content-Aware Skeleton Loading**: Exact proportion matching (Zero CLS), `aria-busy` and `aria-hidden` a11y, GPU shimmer wave, and `prefers-reduced-motion` support.
-10. **Frontend Security**: Safe token storage in HttpOnly cookies / RAM, XSS sanitization via `DOMPurify`, strict CSP headers, and PII masking.
-11. **Core Web Vitals**: LCP < 2.5s, INP < 200ms, CLS < 0.1, route-based code-splitting, zero-layout-shift image sizing, and memory leak prevention.
+13. **Accessible Custom Select & Combobox**: System `<select>` ban, 3-tier matrix (Select / Searchable Combobox / Action Menu), portal flip placement, hidden form inputs.
+14. **Enterprise Micro-UX & Defensive UI**: `tabular-nums` alignment, Undo Toast (soft delete) vs Alert Dialog (hard delete), actionable empty states, button lock, drawer over modal.
+15. **Responsive Big Data Tables & Heavy Pages**: Google-standard Sticky Columns & Frozen Headers, pure CSS Scroll Shadows, Table-to-Card transformation on mobile (< 768px), Inspector Side Sheet (Master-Detail), and Keyset Cursor Pagination (`pageToken`).
+16. **Faceted Search & Big Data Dropdowns**: Google Omnibox tokenized filter chips bar, 3-step guided auto-complete (`field:operator:value`), in-flight `AbortController` cancellation, Combobox DOM virtualization, and mobile Bottom Sheet adaptation ($\ge 48\text{px}$ touch target).

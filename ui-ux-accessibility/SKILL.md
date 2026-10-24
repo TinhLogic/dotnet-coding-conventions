@@ -9,7 +9,8 @@ description: >-
   Auto-triggers whenever working with: UI, UX, frontend, HTML, CSS, React, Next.js, Vue, Nuxt, Angular, Svelte, Blazor, Tailwind,
   accessibility, a11y, WAI-ARIA, WCAG, screen reader, table, data grid, virtual scroll, skeleton shimmer, debounce, badges, SVG icons,
   modal, dialog, dropdown, custom select, combobox, listbox, drawer, side sheet, empty state, toast, snackbar, tabular-nums, design tokens, dark mode, unsaved changes guard, command palette, i18n, l10n, Intl, error boundary,
-  telemetry, XSS, DOMPurify, CSP, Core Web Vitals, LCP, INP, CLS.
+  telemetry, XSS, DOMPurify, CSP, Core Web Vitals, LCP, INP, CLS, responsive table, bảng dữ liệu lớn, responsive big data, Google Cloud Console, scroll shadows, sticky column, table-to-card, cursor pagination, pageToken,
+  faceted search, filter chips, tokenized search, combobox virtualization, bottom sheet dropdown, abortcontroller, guided auto-complete.
   Tự động kích hoạt khi prompt tiếng Việt liên quan đến: thiết kế giao diện, làm UI/UX, bảng dữ liệu, table, data grid,
   danh sách dữ liệu, phân trang server-side, cuộn ảo hóa, virtual scroll, hiệu ứng skeleton, shimmer loading, tìm kiếm debounce,
   chuẩn tiếp cận trợ năng, accessibility, a11y, WAI-ARIA, đọc màn hình screen reader, hộp thoại modal, dialog, popup xác nhận,
@@ -17,7 +18,9 @@ description: >-
   design tokens, giao diện dark mode, tương phản cao, cảnh báo chưa lưu dữ liệu unsaved changes, form validation, bảng lệnh command palette Cmd+K,
   đồng bộ URL query parameters, deep linking, đa ngôn ngữ i18n, định dạng tiền tệ ngày giờ Intl, error boundary chống sập trang,
   bảo mật XSS, DOMPurify, CSP, che dữ liệu nhạy cảm PII, tối ưu hiệu năng web Core Web Vitals LCP INP CLS,
-  skeleton loading, khung xương tải dữ liệu, content-aware skeleton, hiệu ứng shimmer wave, aria-busy skeleton.
+  skeleton loading, khung xương tải dữ liệu, content-aware skeleton, hiệu ứng shimmer wave, aria-busy skeleton,
+  responsive table, responsive bảng dữ liệu lớn, bảng nhiều cột trên mobile, ghim cột sticky column, scroll shadows, table to card, cursor pagination, pageToken, side sheet master detail,
+  tìm kiếm phân nhánh, thanh tìm kiếm chip, tokenized filter bar, guided auto complete, dropdown dữ liệu lớn, combobox ảo hóa, bottom sheet lọc mobile, abortcontroller chống race condition.
   Agent MUST apply these rules across all web stacks and frontend frameworks.
 ---
 
@@ -25,7 +28,7 @@ description: >-
 
 Quy chuẩn bắt buộc cho mọi giao diện Web, thành phần Frontend và trải nghiệm người dùng (UX) được sinh ra hoặc chỉnh sửa bởi AI Agent trên mọi nền tảng kỹ thuật (**React, Vue, Angular, Blazor, Svelte, Next.js, Plain HTML/CSS/JS**).
 
-Áp dụng mô hình **Progressive Disclosure**: file `SKILL.md` này tóm tắt 14 trụ cột cốt lõi, bảng tra cứu nhanh và checklist nghiệm thu. Hướng dẫn chi tiết kèm ví dụ đa ngôn ngữ nằm trong thư mục [references/](./references/).
+Áp dụng mô hình **Progressive Disclosure**: file `SKILL.md` này tóm tắt 16 trụ cột cốt lõi, bảng tra cứu nhanh và checklist nghiệm thu. Hướng dẫn chi tiết kèm ví dụ đa ngôn ngữ nằm trong thư mục [references/](./references/).
 
 ---
 
@@ -47,6 +50,8 @@ Quy chuẩn bắt buộc cho mọi giao diện Web, thành phần Frontend và t
 | **XII** | **Quy Chuẩn Skeleton Loading** | Content-Aware (CLS=0), WAI-ARIA Screen Reader, CSS Shimmer, Reduced Motion | [12-skeleton-loading-patterns.md](./references/12-skeleton-loading-patterns.md) |
 | **XIII** | **Custom Select, Combobox & Dropdown Menu** | Cấm `<select>` mặc định, phân tầng 3 lớp (Shadcn/Google), Portal/Flip, Keyboard A11y | [13-custom-select-combobox.md](./references/13-custom-select-combobox.md) |
 | **XIV** | **Micro-UX, Bố Cục Phòng Thủ & Chuẩn Big Tech** | `tabular-nums`, Undo Toast, Actionable Empty State, 1 Primary CTA, Side Sheet, Hit Area | [14-enterprise-micro-ux-defensive-ui.md](./references/14-enterprise-micro-ux-defensive-ui.md) |
+| **XV** | **Responsive Bảng & Trang Dữ Liệu Lớn** | Chuẩn Google (Sheets/GCP/GA4), Sticky Columns, Scroll Shadows, Table-to-Card, Cursor `pageToken` | [15-responsive-big-data-tables-pages.md](./references/15-responsive-big-data-tables-pages.md) |
+| **XVI** | **Tìm Kiếm Phân Nhánh & Dropdown Dữ Liệu Lớn** | Chuẩn Google Omnibox, Filter Chips Bar, Guided Auto-complete, AbortController, Virtual Dropdown, Mobile Bottom Sheet | [16-google-faceted-search-dropdowns.md](./references/16-google-faceted-search-dropdowns.md) |
 
 ---
 
@@ -132,6 +137,21 @@ Quy chuẩn bắt buộc cho mọi giao diện Web, thành phần Frontend và t
 - ✅ **Side Sheet / Drawer & Cấm Modal chồng Modal**: Tuyệt đối cấm mở Modal đè lên Modal; ưu tiên dùng **Slide-over Drawer / Sheet** trượt từ cạnh phải khi xem/sửa chi tiết dòng bảng dữ liệu.
 - ✅ **Định luật Fitts & Bố cục phòng thủ**: Vùng chạm thực tế tối thiểu `36x36px` (Desktop) / `44x44px` (Mobile), khoảng cách giữa các nút $\ge 8\text{px}$; phòng thủ tràn chữ bằng `min-width: 0`, `text-overflow: ellipsis` kèm Tooltip.
 
+### 15. Responsive Cho Bảng & Trang Dữ Liệu Lớn (Chuẩn Google Cloud, Sheets & GA4)
+- ❌ **CẤM bóp nghẹt chiều rộng cột**: Bảng nhiều cột trên màn hình nhỏ không được co rúm chữ; bắt buộc áp dụng `min-width` kết hợp container cuộn ngang hoặc chuyển đổi layout.
+- ✅ **Desktop**: Ghim cột định danh chính (`position: sticky; left: 0`), ghim header `thead`, và áp dụng hiệu ứng **Scroll Shadows** tự động báo hiệu còn dữ liệu có thể cuộn ngang.
+- ✅ **Mobile / Tablet (Table-to-Card & Bottom Sheet)**: Dưới 768px, chuyển đổi mỗi dòng `<tr>` thành Card hiển thị thông số P0; click dòng để mở **Bottom Sheet / Side Sheet** hiển thị danh sách key-value chi tiết, không chuyển trang làm mất vị trí cuộn.
+- ✅ **Keyset Cursor Pagination (`pageToken`)**: Cấm dùng `OFFSET` trên tập dữ liệu lớn; bắt buộc dùng con trỏ `pageToken` theo chuẩn Google Cloud API.
+- ✅ **Đồng bộ ngữ cảnh URL**: Đồng bộ 2 chiều toàn bộ filter chips, sorting, pageToken và ID dòng đang chọn lên URL query params.
+
+### 16. Tìm Kiếm Phân Nhánh & Dropdown Dữ Liệu Lớn (Google Omnibox & Material 3)
+- ✅ **Thanh tìm kiếm dạng Chip (Tokenized Filter Bar)**: Đóng gói điều kiện lọc thành các thẻ Chip trực quan có nút xóa `×`; hỗ trợ quy trình gợi ý 3 bước (`Thuộc tính -> Toán tử -> Giá trị`).
+- ✅ **Xử lý phím `Backspace` trên Chip**: Khi ô nhập trống, nhấn `Backspace` lần 1 để highlight Chip cuối cùng, lần 2 để xóa Chip đó; hỗ trợ phím tắt `/` để focus thanh search.
+- ✅ **Debounce 300ms & `AbortController`**: Bắt buộc trì hoãn 300ms và tự động hủy request cũ (`abort()`) khi có ký tự mới để chống Race Condition.
+- ✅ **Ảo hóa Dropdown (> 100 mục)**: Áp dụng Virtual Scroll giữ số DOM node trong dropdown menu luôn ở mức 10–15 phần tử ($O(1)$).
+- ✅ **Nén thẻ Multi-select (Badge Condensation)**: Chọn $\ge 3$ mục hiển thị `Tên mục 1, +X khác`, không để Badge làm phình vỡ layout.
+- ✅ **Mobile Bottom Sheet**: Trên `< 768px`, chuyển đổi toàn bộ Dropdown thành Modal Bottom Sheet vuốt từ đáy lên với vùng chạm $\ge 48\text{px}$ và search bar ghim đỉnh.
+
 ---
 
 ## 📋 Checklist Nghiệm Thu Chuẩn Enterprise (Audit Checklist)
@@ -155,3 +175,7 @@ Quy chuẩn bắt buộc cho mọi giao diện Web, thành phần Frontend và t
 - [ ] Skeleton loading có khớp kích thước thực tế (Zero CLS), khai báo `aria-busy="true"` và tôn trọng `prefers-reduced-motion` không?
 - [ ] Đã loại bỏ hoàn toàn thẻ `<select>` mặc định và thay bằng Custom Select (< 8 mục) hoặc Searchable Combobox ($\ge 8$ mục) chuẩn WAI-ARIA, hỗ trợ bàn phím, chống bị cắt khung nhìn và đồng bộ `<input type="hidden">` chưa?
 - [ ] Cột số/tiền tệ đã căn phải kèm `tabular-nums`, Empty State có nút hành động CTA, nút Submit có khóa chống bấm đúp giữ nguyên chiều rộng, và không có Modal chồng Modal chưa?
+- [ ] Bảng nhiều cột có ghim cột định danh (`sticky left`), có Scroll Shadows báo cuộn ngang, và chuyển sang Table-to-Card / Bottom Sheet trên mobile (< 768px) chưa?
+- [ ] Đã dùng Keyset Cursor Pagination (`pageToken`) thay cho Offset trên bảng dữ liệu lớn, và click dòng mở Side Sheet/Drawer bảo toàn vị trí cuộn chưa?
+- [ ] Thanh tìm kiếm có đóng gói điều kiện thành Filter Chips, hỗ trợ Backspace xóa chip, debounce 300ms và hủy request cũ bằng `AbortController` chưa?
+- [ ] Dropdown nhiều dữ liệu có ảo hóa DOM, nén thẻ Multi-select (+X khác), và chuyển sang Modal Bottom Sheet trên mobile (< 768px) với hit area $\ge 48\text{px}$ chưa?

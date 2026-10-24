@@ -7,6 +7,9 @@ Trong các ứng dụng Web hiện đại và hệ thống Enterprise, **thẻ `
 
 Mọi thành phần chọn dữ liệu và menu thả xuống **bắt buộc phải sử dụng Custom Select / Combobox / Dropdown Menu** theo kiến trúc phân tầng của **shadcn/ui (Radix UI)** và **Google Material Design 3**.
 
+> [!TIP]
+> Đối với các thanh tìm kiếm phân nhánh (Faceted Search Bar với Filter Chips dạng `key:value`), thanh tìm kiếm kết hợp `AbortController`, Dropdown ảo hóa số lượng lớn (> 100 mục) và chuyển đổi thành Modal Bottom Sheet trên mobile (< 768px), xem quy chuẩn chuyên sâu tại: [`16-google-faceted-search-dropdowns.md`](./16-google-faceted-search-dropdowns.md).
+
 ---
 
 ## 1. Ma Trận Phân Loại 3 Tầng (Chuẩn Shadcn UI & Google)

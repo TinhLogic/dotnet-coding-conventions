@@ -2,6 +2,9 @@
 
 Mọi bảng dữ liệu (Table / Data Grid) trong hệ thống hiển thị danh sách từ cơ sở dữ liệu **bắt buộc** phải tuân theo quy chuẩn nạp dữ liệu hiện đại, tối ưu hiệu năng theo mô hình của Google (Google Cloud Console, Google Drive, BigQuery), tuyệt đối không tải ồ ạt toàn bộ dữ liệu vào bộ nhớ RAM của trình duyệt hoặc máy chủ.
 
+> [!TIP]
+> Xem hướng dẫn chuyên sâu toàn diện về thiết kế Responsive cho bảng nhiều cột, Sticky Columns/Headers, Scroll Shadows, Master-Detail Side Sheet và phân trang Keyset Cursor (`pageToken`) theo chuẩn Google tại: [`15-responsive-big-data-tables-pages.md`](./15-responsive-big-data-tables-pages.md).
+
 ---
 
 ## 1. Bắt Buộc Phân Trang & Lọc Tại Tầng Cơ Sở Dữ Liệu (Server-Side Query)
